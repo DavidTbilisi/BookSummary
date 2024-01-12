@@ -1,0 +1,32 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    title წიგნების შეჯამება
+    link(rel='stylesheet' href='style.css')
+  body
+    .header
+      nav
+        ul
+          li
+            a(href='#') მთავარი
+          li
+            a(href='#') პოპულარული
+          li
+            a(href='#') ჩვენს შესახებ
+    .grid-container
+      - let n = 1
+      while n < 30
+        - n++
+        .book
+            .book__cover
+            img(src='https://www.burnthefatinnercircle.com/members/images/2252.jpg?cb=20231212125423' alt='')
+            h2.book__title შეჭამე ბაყაყი 
+            h3.book__author ბრაიან თრეისი
+            p.book__desc
+            | ამ წიგნში არის მოცემული მასალა მარტივად და მარტივად გასაგები და გამოსახულებად განათავსებული. ამ წიგნში არის მოცემული მასალა მარტივად და მარტივად გასაგები და გამოსახულებად განათავსებული.
+            .buttons
+              a.go-to-summary(href="./books/dest/001.html") შეჯამების წაკითხვა
+              a.go-to-book წიგნის წაკითხვა
+

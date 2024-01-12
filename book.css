@@ -1,0 +1,15 @@
+body {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-size: 2rem;
+    font-family: 'Roboto', sans-serif;
+}
+
+p, li, a, span {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.5rem;
+}

@@ -6,8 +6,8 @@ mixin book(item)
       h3.book__author= item.author
       p.book__desc= item.desc
       .buttons
-        a.go-to-summary(href=item.summary_url) შეჯამების წაკითხვა
-        a.go-to-book წიგნის წაკითხვა
+        a.go-to-summary(href=item.summary_url, target="_blank") შეჯამების წაკითხვა
+        a.go-to-book(href=item.book_url, target="_blank") წიგნის წაკითხვა
 
 -
   let books = [
@@ -34,6 +34,14 @@ mixin book(item)
                   img: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1554211384i/44770129.jpg',
                   summary_url: '#',
                   book_url: '#'
+                },
+                {
+                  title: 'The 5 Elements of Effective Thinking',
+                  author: 'Edward B. Burger, Michael Starbird',
+                  desc: 'ეფექტური აზროვნების 5 ელემენტის პირდაპირი და დამაფიქრებელი ტექნიკის გამოყენებით, თქვენ რეგულარულად იპოვით წარმოსახვით გადაწყვეტილებებს რთული გამოწვევებისთვის და აღმოაჩენთ ახალ გზებს თქვენი სამყაროსა და საკუთარი თავის შეხედვისთვის - ადრე ფარული შესაძლებლობების გამოვლენაში.',
+                  img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp6Agfgjk0LvZyl6ejbNjAfjjTT6yYtz9oZS1T5r6XCGSnNpyovjUxAtGSLSbOMfi8PFo&usqp=CAU',
+                  summary_url: 'https://www.shortform.com/blog/the-5-elements-of-effective-thinking/',
+                  book_url: 'https://www.amazon.com/5-Elements-Effective-Thinking/dp/0691156662'
                 }
               ]
       

@@ -1,3 +1,43 @@
+mixin book(item)
+  .book
+      .book__cover
+      img(src=item.img, alt='book cover')
+      h2.book__title= item.title
+      h3.book__author= item.author
+      p.book__desc= item.desc
+      .buttons
+        a.go-to-summary(href=item.summary_url) შეჯამების წაკითხვა
+        a.go-to-book წიგნის წაკითხვა
+
+-
+  let books = [
+                {
+                  title: 'შეჭამე ბაყაყი',
+                  author: 'ბრაიან თრეისი',
+                  desc: 'საერთაშორისო ბესტსელერი. უბრალოდ დრო არ არის საკმარისი იმისათვის, რომ ყველაფერი გავაკეთოთ ჩვენს სიაში - და არც არასდროს იქნება. წარმატებული ადამიანები არ ცდილობენ ყველაფრის გაკეთებას.',
+                  img: 'https://www.burnthefatinnercircle.com/members/images/2252.jpg?cb=20231212125423',
+                  summary_url: './books/dest/001.html',
+                  book_url: '#'
+                },
+                {
+                  title: 'Getting Things Done (GTD)',
+                  author: 'დევიდ ალენი',
+                  desc: 'საქმის კეთება (GTD) არის პერსონალური პროდუქტიულობის მეთოდოლოგია, რომელიც ხელახლა განსაზღვრავს, თუ როგორ მიუდგებით თქვენს ცხოვრებას და საქმიანობას.',
+                  img: 'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQZ_blTukS5FcvIprKh9MkI-XaLGdkGyTZUj-jAG7v-xS9qE-iK',
+                  summary_url: './books/dest/002.html',
+                  book_url: '#'
+                },
+                {
+                  title: 'Ultralearning',
+                  author: 'Scott H. Young',
+                  desc: 'გააძლიერეთ თქვენი კარიერა მომავალზე და მაქსიმალურად გაზარდეთ თქვენი კონკურენტული უპირატესობა იმ უნარების შესწავლით, რომელიც აუცილებელია იმისათვის, რომ დარჩეთ აქტუალური, ხელახლა გამოიგონოთ საკუთარი თავი და მოერგოთ იმას, რასაც სამუშაო ადგილი გიბიძგებს ამ აუცილებელ სახელმძღვანელოში.',
+                  img: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1554211384i/44770129.jpg',
+                  summary_url: '#',
+                  book_url: '#'
+                }
+              ]
+      
+
 doctype html
 html(lang='en')
   head
@@ -16,17 +56,5 @@ html(lang='en')
           li
             a(href='#') ჩვენს შესახებ
     .grid-container
-      - let n = 1
-      while n < 30
-        - n++
-        .book
-            .book__cover
-            img(src='https://www.burnthefatinnercircle.com/members/images/2252.jpg?cb=20231212125423' alt='')
-            h2.book__title შეჭამე ბაყაყი 
-            h3.book__author ბრაიან თრეისი
-            p.book__desc
-            | ამ წიგნში არის მოცემული მასალა მარტივად და მარტივად გასაგები და გამოსახულებად განათავსებული. ამ წიგნში არის მოცემული მასალა მარტივად და მარტივად გასაგები და გამოსახულებად განათავსებული.
-            .buttons
-              a.go-to-summary(href="./books/dest/001.html") შეჯამების წაკითხვა
-              a.go-to-book წიგნის წაკითხვა
-
+      each b in books
+        +book(b)

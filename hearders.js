@@ -20,6 +20,15 @@
   
         listItem.appendChild(link);
         list.appendChild(listItem);
+  
+        // Add "Back to Menu" link to each heading
+        const backLink = document.createElement('a');
+        backLink.href = '#outline';
+        backLink.textContent = 'Back to Menu';
+        backLink.style.marginLeft = '10px';
+        backLink.style.fontSize = '0.8em';
+  
+        heading.appendChild(backLink);
       });
   
       outlineContainer.appendChild(list);

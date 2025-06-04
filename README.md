@@ -1,10 +1,18 @@
-# პროექტი წიგნის შეჯამება 
+# Book Summary
 
-## აღწერა
+This repository contains short book summaries. Source files are written in [Pug](https://pugjs.org/) templates and Markdown. A build step converts them to static HTML.
 
-წიგნის შეჯამების პროექტი არის ვებ-ზე დაფუძნებული აპლიკაცია, რომელიც შექმნილია სხვადასხვა წიგნის მოკლე და ინფორმაციული რეზიუმეების უზრუნველსაყოფად. ჩვენი პლატფორმა ემსახურება მკითხველებს, რომლებიც ეძებენ წიგნების სწრაფ ინფორმაციას, კლასიკური ლიტერატურიდან დაწყებული თანამედროვე ბესტსელერებით დამთავრებული.
+## Development
 
-## Technologies Used
-**Pug**: Templating engine for generating HTML.\
-**CSS**: Styling for the web pages.\
-**[Markdown to HTML](https://markdowntohtml.com/)**
+Install dependencies and build the site:
+
+```bash
+npm install
+npm run build
+```
+
+The generated files appear in the `dist/` directory.
+
+## Continuous Integration
+
+A GitHub Actions workflow (`.github/workflows/build.yml`) builds the HTML on every push to `main` or `master` and uploads the contents of `dist` as an artifact.

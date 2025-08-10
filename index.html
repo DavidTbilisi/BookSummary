@@ -1,64 +1,97 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>წიგნების შეჯამება</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="#">მთავარი</a></li>
-          <li><a href="#">პოპულარული</a></li>
-          <li><a href="#">ჩვენს შესახებ</a></li>
+<html lang="ka" class="h-full scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>წიგნების შეჯამება</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <script>/* Initial catalog theme (prevent FOUC) */(function(){try{var t=localStorage.getItem('catalogTheme')||'sepia';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body class="min-h-full bg-[var(--clr-parchment)] font-serif text-[var(--clr-ink)] antialiased selection:bg-amber-300/60 selection:text-amber-900">
+  <header class="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/70 border-b border-[var(--clr-border)] shadow-sm">
+    <div class="mx-auto max-w-7xl px-4 py-3 flex items-center gap-6">
+      <h1 class="text-2xl font-bold tracking-tight font-display">ბიბლიოთეკა</h1>
+      <nav aria-label="Primary" class="ml-auto">
+        <ul class="flex gap-4 text-sm font-medium">
+          <li><a class="nav-link" href="#books">მთავარი</a></li>
+          <li><a class="nav-link" href="#popular">პოპულარული</a></li>
+          <li><a class="nav-link" href="#about">ჩვენს შესახებ</a></li>
         </ul>
       </nav>
-    </div>
-    <div class="grid-container">
-      <div class="book">
-        <div class="book__cover"></div><img src="https://www.burnthefatinnercircle.com/members/images/2252.jpg?cb=20231212125423" alt="book cover"/>
-        <h2 class="book__title">შეჭამე ბაყაყი</h2>
-        <h3 class="book__author">ბრაიან თრეისი</h3>
-        <p class="book__desc">საერთაშორისო ბესტსელერი. უბრალოდ დრო არ არის საკმარისი იმისათვის, რომ ყველაფერი გავაკეთოთ ჩვენს სიაში - და არც არასდროს იქნება. წარმატებული ადამიანები არ ცდილობენ ყველაფრის გაკეთებას.</p>
-        <div class="buttons"><a class="go-to-summary" href="./books/dest/001.html" target="_blank">შეჯამების წაკითხვა</a><a class="go-to-book" href="#" target="_blank">წიგნის წაკითხვა</a></div>
+      <div class="hidden md:flex items-center gap-2" aria-label="თემა">
+        <label for="themeSelect" class="sr-only">Theme</label>
+        <select id="themeSelect" class="rounded-md border border-[var(--clr-border)] bg-[var(--clr-paper)]/80 px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500">
+          <option value="sepia">Sepia</option>
+          <option value="dark">Dark</option>
+          <option value="black">Black</option>
+          <option value="hc">High Contrast</option>
+        </select>
       </div>
-      <div class="book">
-        <div class="book__cover"></div><img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQZ_blTukS5FcvIprKh9MkI-XaLGdkGyTZUj-jAG7v-xS9qE-iK" alt="book cover"/>
-        <h2 class="book__title">Getting Things Done (GTD)</h2>
-        <h3 class="book__author">დევიდ ალენი</h3>
-        <p class="book__desc">საქმის კეთება (GTD) არის პერსონალური პროდუქტიულობის მეთოდოლოგია, რომელიც ხელახლა განსაზღვრავს, თუ როგორ მიუდგებით თქვენს ცხოვრებას და საქმიანობას.</p>
-        <div class="buttons"><a class="go-to-summary" href="./books/dest/002.html" target="_blank">შეჯამების წაკითხვა</a><a class="go-to-book" href="#" target="_blank">წიგნის წაკითხვა</a></div>
-      </div>
-      <div class="book">
-        <div class="book__cover"></div><img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1554211384i/44770129.jpg" alt="book cover"/>
-        <h2 class="book__title">Ultralearning</h2>
-        <h3 class="book__author">Scott H. Young</h3>
-        <p class="book__desc">გააძლიერეთ თქვენი კარიერა მომავალზე და მაქსიმალურად გაზარდეთ თქვენი კონკურენტული უპირატესობა იმ უნარების შესწავლით, რომელიც აუცილებელია იმისათვის, რომ დარჩეთ აქტუალური, ხელახლა გამოიგონოთ საკუთარი თავი და მოერგოთ იმას, რასაც სამუშაო ადგილი გიბიძგებს ამ აუცილებელ სახელმძღვანელოში.</p>
-        <div class="buttons"><a class="go-to-summary" href="#" target="_blank">შეჯამების წაკითხვა</a><a class="go-to-book" href="#" target="_blank">წიგნის წაკითხვა</a></div>
-      </div>
-      <div class="book">
-        <div class="book__cover"></div><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp6Agfgjk0LvZyl6ejbNjAfjjTT6yYtz9oZS1T5r6XCGSnNpyovjUxAtGSLSbOMfi8PFo&amp;usqp=CAU" alt="book cover"/>
-        <h2 class="book__title">The 5 Elements of Effective Thinking</h2>
-        <h3 class="book__author">Edward B. Burger, Michael Starbird</h3>
-        <p class="book__desc">ეფექტური აზროვნების 5 ელემენტის პირდაპირი და დამაფიქრებელი ტექნიკის გამოყენებით, თქვენ რეგულარულად იპოვით წარმოსახვით გადაწყვეტილებებს რთული გამოწვევებისთვის და აღმოაჩენთ ახალ გზებს თქვენი სამყაროსა და საკუთარი თავის შეხედვისთვის - ადრე ფარული შესაძლებლობების გამოვლენაში.</p>
-        <div class="buttons"><a class="go-to-summary" href="./books/dest/005.html" target="_blank">შეჯამების წაკითხვა</a><a class="go-to-book" href="https://www.amazon.com/5-Elements-Effective-Thinking/dp/0691156662" target="_blank">წიგნის წაკითხვა</a></div>
-      </div>
-      <div class="book">
-        <div class="book__cover"></div><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTszXFLGlk6g0XhteqInJ2yWfwDsYiZcFrbBDXLw11qg7hF-SDV" alt="book cover"/>
-        <h2 class="book__title">Think again</h2>
-        <h3 class="book__author">Adam Grant</h3>
-        <p class="book__desc">ადამ მ. გრანტი არის ამერიკელი პოპულარული მეცნიერების ავტორი და პენსილვანიის უნივერსიტეტის უორტონის სკოლის პროფესორი, რომელიც სპეციალიზირებულია ორგანიზაციულ ფსიქოლოგიაში.</p>
-        <div class="buttons"><a class="go-to-summary" href="./books/dest/004.html" target="_blank">შეჯამების წაკითხვა</a><a class="go-to-book" href="https://www.amazon.com/Think-Again-Power-Knowing-What/dp/1984878107" target="_blank">წიგნის წაკითხვა</a></div>
-      </div>
-      <div class="book">
-        <div class="book__cover"></div><img src="https://m.media-amazon.com/images/I/71aG0m9XRcL._AC_UF1000,1000_QL80_.jpg" alt="book cover"/>
-        <h2 class="book__title">ფულის ფსიქოლოგია</h2>
-        <h3 class="book__author">მორგან ჰაუსელი</h3>
-        <p class="book__desc">ფინანსების სფერო, მათ შორის ინვესტიციები, პირადი ფინანსები და ბიზნეს გადაწყვეტილებები, ჩვეულებრივ წარმოდგენილია როგორც მათემატიკური სფერო, სადაც მოცემულია ზუსტი ინსტრუქციები მონაცემებისა და ფორმულების საფუძველზე. თუმცა, რეალურ სამყაროში ადამიანები არ იყენებენ ცხრილებს მნიშვნელოვანი ფინანსური გადაწყვეტილებების მისაღებად. სადილის მაგიდასთან ან საკონფერენციო დარბაზში ადამიანები ერთმანეთში ურევენ საკუთარ ფონს, პერსპექტივებს, ეგოებს, სიამაყეებს, მარკეტინგულ სტრატეგიებს და თავისებურ მოტივებს ამ გადაწყვეტილებების მისაღებად.</p>
-        <div class="buttons"><a class="go-to-summary" href="./books/dest/006.html" target="_blank">შეჯამების წაკითხვა</a><a class="go-to-book" href="https://www.amazon.com/Psychology-Money-Timeless-lessons-happiness/dp/0857197681" target="_blank">წიგნის წაკითხვა</a></div>
+      <div class="relative hidden md:block">
+        <input id="search" type="search" placeholder="ძებნა..." class="peer w-56 rounded-md border border-[var(--clr-border)] bg-[var(--clr-paper)]/70 px-3 py-1.5 text-sm outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition" />
+        <div class="pointer-events-none absolute inset-y-0 right-2 flex items-center text-xs text-[var(--clr-muted)]">Ctrl+K</div>
       </div>
     </div>
-  </body>
+  </header>
+  <main id="books" class="mx-auto max-w-7xl px-4 py-10">
+    <h2 class="sr-only">წიგნების სია</h2>
+    <div id="bookGrid" class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <!-- Book cards injected from static markup below (progressive enhancement) -->
+    </div>
+    <template id="book-card-template">
+      <article class="group relative flex flex-col overflow-hidden rounded-lg border border-[var(--clr-border)] bg-[var(--clr-paper)]/80 shadow hover:shadow-lg transition-shadow focus-within:shadow-lg">
+        <div class="aspect-[3/4] overflow-hidden">
+          <img data-el="cover" alt="" class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
+        </div>
+        <div class="flex flex-1 flex-col p-3 gap-2">
+          <header class="flex-1">
+            <h3 class="text-base font-semibold leading-snug line-clamp-2" data-el="title"></h3>
+            <p class="mt-1 text-xs font-medium tracking-wide uppercase text-[var(--clr-accent)]" data-el="author"></p>
+          </header>
+          <div class="mt-auto flex gap-2">
+            <a data-el="summaryLink" class="btn-primary flex-1 text-center" target="_blank" rel="noopener">შეჯამება</a>
+            <a data-el="bookLink" class="btn-secondary flex-1 text-center" target="_blank" rel="noopener">წიგნი</a>
+          </div>
+          <button type="button" class="mt-2 w-full rounded border border-[var(--clr-border)] bg-[var(--clr-parchment)]/40 px-2 py-1 text-xs font-medium tracking-wide hover:bg-amber-100/60 focus:outline-none focus:ring-2 focus:ring-amber-500" data-el="openDesc">ვრცლად</button>
+        </div>
+      </article>
+    </template>
+  <!-- books now loaded from data/books.json -->
+  </main>
+  <footer id="about" class="mt-16 border-t border-[var(--clr-border)] bg-[var(--clr-paper)]/60 backdrop-blur">
+    <div class="mx-auto max-w-7xl px-4 py-8 text-sm text-[var(--clr-muted)] flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <p>&copy; <span id="year"></span> წიგნების შეჯამება.</p>
+      <p class="italic">წიგნების სიყვარული ზრდის აზროვნებას.</p>
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div id="descDialog" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+    <div class="absolute inset-0 bg-neutral-950/70 backdrop-blur-sm"></div>
+    <div class="relative mx-auto mt-20 w-full max-w-lg rounded-xl border border-[var(--clr-border-strong)] bg-[var(--clr-paper)]/95 p-6 shadow-2xl ring-1 ring-black/10 animate-in fade-in zoom-in">
+      <div class="flex items-start gap-4">
+        <div class="shrink-0 h-28 w-20 overflow-hidden rounded border border-[var(--clr-border)] bg-neutral-200">
+          <img id="dialogCover" alt="" class="h-full w-full object-cover" />
+        </div>
+        <div class="flex-1 min-w-0">
+          <h3 id="dialogTitle" class="text-lg font-semibold leading-snug"></h3>
+          <p id="dialogAuthor" class="mt-1 text-xs uppercase tracking-wide text-[var(--clr-accent)]"></p>
+        </div>
+        <button id="dialogClose" class="ml-2 rounded p-1 text-[var(--clr-muted)] hover:text-[var(--clr-ink)] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500" aria-label="დახურვა">✕</button>
+      </div>
+      <div id="dialogBody" class="mt-4 max-h-64 overflow-y-auto pr-2 text-sm leading-relaxed"></div>
+      <div class="mt-6 flex justify-end gap-3">
+        <a id="dialogSummary" target="_blank" rel="noopener" class="btn-primary">შეჯამება</a>
+        <a id="dialogBook" target="_blank" rel="noopener" class="btn-secondary">წიგნი</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/app.js" type="module"></script>
+</body>
 </html>

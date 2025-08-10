@@ -1,0 +1,103 @@
+/* Catalog main stylesheet consolidated (was style.css) */
+/* Bookish theme variables */
+:root {
+	--clr-parchment: #f6f1e3;
+	--clr-parchment-dark: #ece3ce;
+	--clr-ink: #2f2a25;
+	--clr-accent: #b7791f;
+	--clr-accent-soft: #f6d79b;
+	--clr-border: #d9ccb3;
+	--clr-border-strong: #bfae8d;
+	--clr-paper: #fffdf8;
+	--clr-muted: #6f655c;
+}
+
+html { font-family: 'Merriweather', serif; }
+body { background-image: radial-gradient(circle at 25% 15%, rgba(255,255,255,0.9), rgba(255,255,255,0) 70%), url('https://www.transparenttextures.com/patterns/aged-paper.png'); background-attachment: fixed; }
+
+/* Utility buttons overriding Tailwind */
+.btn-primary, .btn-secondary {
+	display:inline-flex;
+	align-items:center;
+	justify-content:center;
+	border-radius:0.375rem;
+	padding:0.375rem 0.75rem; /* px-3 py-1.5 */
+	font-size:0.75rem; /* text-xs */
+	font-weight:600;
+	letter-spacing:0.05em; /* tracking-wide */
+	line-height:1.1;
+	transition:background-color .25s, color .25s, box-shadow .25s;
+	position:relative;
+}
+.btn-primary { background:#d97706; color:#fff; box-shadow:0 1px 2px rgba(0,0,0,.08); }
+.btn-primary:hover { background:#b45309; }
+.btn-secondary { background:#fef3c7; color:#78350f; border:1px solid var(--clr-border); }
+.btn-secondary:hover { background:#fde68a; }
+.btn-primary:focus-visible, .btn-secondary:focus-visible { outline:2px solid #f59e0b; outline-offset:2px; }
+
+/* Nav link style */
+.nav-link {
+	padding:0.5rem 0.75rem; /* px-3 py-2 */
+	border-radius:0.375rem;
+	font-size:13px;
+	font-weight:500;
+	color:var(--clr-muted);
+	text-decoration:none;
+	transition:background-color .25s,color .25s;
+}
+.nav-link:hover { color:var(--clr-ink); background:rgba(251,191,36,0.25); }
+.nav-link:focus-visible { outline:2px solid #f59e0b; outline-offset:2px; }
+
+/* Line clamp fallback */
+.line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-clamp:2; }
+
+/* Scrollbar styling */
+#dialogBody::-webkit-scrollbar { width: 10px; }
+#dialogBody::-webkit-scrollbar-track { background: var(--clr-parchment-dark); }
+#dialogBody::-webkit-scrollbar-thumb { background: var(--clr-accent); border-radius: 6px; }
+#dialogBody::-webkit-scrollbar-thumb:hover { background: #8c5d10; }
+
+/* Simple enter animations */
+@keyframes fade-in { from { opacity:0; transform:translateY(4px);} to { opacity:1; transform:translateY(0);} }
+@keyframes zoom-in { from { scale:.96; opacity:0;} to { scale:1; opacity:1;} }
+.animate-in { animation-duration:.4s; animation-fill-mode:both; }
+.fade-in { animation-name:fade-in; }
+.zoom-in { animation-name:zoom-in; }
+
+/* Focus ring offset background harmonization */
+:focus-visible { outline:2px solid #f59e0b; outline-offset:2px; }
+
+/* Stronger styling for the 'ვრცლად' (read more) button */
+button[data-el="openDesc"] {
+	background: var(--clr-parchment) !important; /* remove transparency */
+	border-color: var(--clr-border-strong);
+	color: var(--clr-ink);
+}
+button[data-el="openDesc"]:hover {
+	background: var(--clr-accent-soft) !important;
+}
+button[data-el="openDesc"]:focus-visible {
+	outline:2px solid var(--clr-accent);
+	outline-offset:2px;
+}
+
+/* Opaque sections (cards & modal content) */
+#bookGrid article { background: var(--clr-paper) !important; }
+#descDialog .relative { background: var(--clr-paper) !important; }
+
+/* Theming (catalog) */
+[data-theme="sepia"] {
+	--clr-parchment:#f4ecd8; --clr-parchment-dark:#e9ddc3; --clr-ink:#3a2e25; --clr-accent:#a56418; --clr-accent-soft:#e9c187; --clr-border:#d8c8ae; --clr-border-strong:#c4b192; --clr-paper:#fbf7ef; --clr-muted:#7d6e60;
+}
+[data-theme="dark"] {
+	--clr-parchment:#1f1c18; --clr-parchment-dark:#2a241f; --clr-ink:#f5e9d6; --clr-accent:#d39a39; --clr-accent-soft:#6a4b16; --clr-border:#3b332c; --clr-border-strong:#52463b; --clr-paper:#27221d; --clr-muted:#a2917d;
+}
+[data-theme="black"] {
+	--clr-parchment:#050505; --clr-parchment-dark:#0b0b0b; --clr-ink:#e5e5e5; --clr-accent:#ffa726; --clr-accent-soft:#8d5f12; --clr-border:#222; --clr-border-strong:#333; --clr-paper:#0f0f0f; --clr-muted:#9a9a9a;
+}
+[data-theme="hc"] { /* high contrast */
+	--clr-parchment:#000; --clr-parchment-dark:#000; --clr-ink:#fff; --clr-accent:#ffff00; --clr-accent-soft:#444400; --clr-border:#ffffff; --clr-border-strong:#ffff00; --clr-paper:#000; --clr-muted:#e0e0e0;
+}
+
+/* Transition for theme changes */
+body, #bookGrid article, #descDialog .relative { transition: background-color .4s, color .4s, border-color .4s; }

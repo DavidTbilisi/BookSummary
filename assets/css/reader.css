@@ -1,75 +1,106 @@
+/* Reader stylesheet consolidated (was book.css) */
 /* =============================================
-     Book Reading Theme (Modern Bookish UI)
-     ============================================= */
+	 Book Reading Theme (Modern Bookish UI)
+	 ============================================= */
 /* CSS Variables for theming */
 :root {
-    --font-serif: 'Merriweather', 'Georgia', serif;
-    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    --font-mono: 'Courier New', ui-monospace, SFMono-Regular, Menlo, monospace;
+	--font-serif: 'Merriweather', 'Georgia', serif;
+	--font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+	--font-mono: 'Courier New', ui-monospace, SFMono-Regular, Menlo, monospace;
 
-    --clr-bg: #f6f1e3; /* parchment */
-    --clr-bg-alt: #fffdf8;
-    --clr-fg: #2e271f;
-    --clr-muted: #6e6256;
-    --clr-accent: #b7791f;
-    --clr-border: #dbcdb4;
-    --clr-code-bg: #fbefcf;
-    --clr-mark: #fff2a8;
+	--clr-bg: #f6f1e3; /* parchment */
+	--clr-bg-alt: #fffdf8;
+	--clr-fg: #2e271f;
+	--clr-muted: #6e6256;
+	--clr-accent: #b7791f;
+	--clr-border: #dbcdb4;
+	--clr-code-bg: #fbefcf;
+	--clr-mark: #fff2a8;
 
-    --leading: 1.65;
-    --max-width: 58ch;
-    --para-space: 0.85em;
-    --font-size-base: 1.05rem;
+	--leading: 1.65;
+	--max-width: 58ch;
+	--para-space: 0.85em;
+	--font-size-base: 1.05rem;
 }
 
 /* Dark mode */
 [data-theme="dark"] {
-    --clr-bg: #1e1b16;
-    --clr-bg-alt: #27231d;
-    --clr-fg: #f3e9d7;
-    --clr-muted: #b09f89;
-    --clr-accent: #d39a39;
-    --clr-border: #3d362d;
-    --clr-code-bg: #332d24;
-    --clr-mark: #5a4512;
+	--clr-bg: #1e1b16;
+	--clr-bg-alt: #27231d;
+	--clr-fg: #f3e9d7;
+	--clr-muted: #b09f89;
+	--clr-accent: #d39a39;
+	--clr-border: #3d362d;
+	--clr-code-bg: #332d24;
+	--clr-mark: #5a4512;
 }
 
 /* Night high-contrast mode */
 [data-theme="night"] {
-    --clr-bg: #0c0d10;
-    --clr-bg-alt: #13151a;
-    --clr-fg: #d8dce2;
-    --clr-muted: #7c8695;
-    --clr-accent: #7fb4ff;
-    --clr-border: #242a33;
-    --clr-code-bg: #1c222b;
-    --clr-mark: #25374d;
+	--clr-bg: #0c0d10;
+	--clr-bg-alt: #13151a;
+	--clr-fg: #d8dce2;
+	--clr-muted: #7c8695;
+	--clr-accent: #7fb4ff;
+	--clr-border: #242a33;
+	--clr-code-bg: #1c222b;
+	--clr-mark: #25374d;
 }
+
+/* Pure black & white high contrast mode */
+[data-theme="bw"] {
+	--clr-bg:#000;
+	--clr-bg-alt:#111;
+	--clr-fg:#fff;
+	--clr-muted:#cfcfcf;
+	--clr-accent:#ffffff; /* keep links white, invert via underline */
+	--clr-border:#444;
+	--clr-code-bg:#111;
+	--clr-mark:#fff; /* will invert text via mix-blend? keep simple */
+}
+
+/* High contrast (yellow accents) */
+[data-theme="hc"] {
+	--clr-bg:#000;
+	--clr-bg-alt:#000;
+	--clr-fg:#ffffff;
+	--clr-muted:#f2f2f2;
+	--clr-accent:#ffff00;
+	--clr-border:#ffffff;
+	--clr-code-bg:#000;
+	--clr-mark:#ffff00;
+}
+
+[data-theme="hc"] a { text-decoration: underline; font-weight:700; }
+[data-theme="hc"] .control-bar button:hover { background: #ffff00; color:#000; }
+[data-theme="hc"] ::selection { background:#ffff00; color:#000; }
+[data-theme="hc"] blockquote { border-left-color:#ffff00; }
+[data-theme="hc"] .progress-bar { background:linear-gradient(90deg,#ffff00,#ffff00); }
 
 /* Sepia mode */
 [data-theme="sepia"] {
-    --clr-bg: #f4ecd8;
-    --clr-bg-alt: #fbf6eb;
-    --clr-fg: #3a2e25;
-    --clr-muted: #8a7a68;
-    --clr-accent: #a56418;
-    --clr-border: #e3d8c4;
-    --clr-code-bg: #efe3cc;
-    --clr-mark: #ffe7a3;
+	--clr-bg: #f4ecd8;
+	--clr-bg-alt: #fbf6eb;
+	--clr-fg: #3a2e25;
+	--clr-muted: #8a7a68;
+	--clr-accent: #a56418;
+	--clr-border: #e3d8c4;
+	--clr-code-bg: #efe3cc;
+	--clr-mark: #ffe7a3;
 }
 
 html { font-size: 100%; }
 body {
-    margin:0;
-    font-family: var(--font-serif);
-    font-size: var(--font-size-base);
-    line-height: var(--leading);
-    color: var(--clr-fg);
-    background: var(--clr-bg) url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-    hanging-punctuation: first last;
-    overflow-y: scroll;
+	margin:0;
+	font-family: var(--font-serif);
+	font-size: var(--font-size-base);
+	line-height: var(--leading);
+	color: var(--clr-fg);
+	background: var(--clr-bg) url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+	hanging-punctuation: first last;
+	overflow-y: scroll;
 }
 
 /* Layout wrapper */
@@ -84,6 +115,8 @@ body {
 .control-bar button { background:var(--clr-bg-alt); color:var(--clr-fg); border:1px solid var(--clr-border); font-family:var(--font-sans); font-size:.65rem; padding:.45rem .55rem; border-radius:6px; cursor:pointer; letter-spacing:.05em; font-weight:600; box-shadow:0 1px 2px rgba(0,0,0,.05); backdrop-filter: blur(6px); }
 .control-bar button:hover { background:var(--clr-accent); color:#fff; }
 .control-bar button:focus-visible { outline:2px solid var(--clr-accent); outline-offset:2px; }
+.control-bar select { background:var(--clr-bg-alt); color:var(--clr-fg); border:1px solid var(--clr-border); font-family:var(--font-sans); font-size:.55rem; padding:.35rem .4rem; border-radius:6px; cursor:pointer; letter-spacing:.05em; font-weight:600; box-shadow:0 1px 2px rgba(0,0,0,.05); }
+.control-bar select:focus-visible { outline:2px solid var(--clr-accent); outline-offset:2px; }
 
 /* Typography */
 h1,h2,h3,h4,h5,h6 { font-family: var(--font-serif); font-weight:700; line-height:1.2; margin:2.4em 0 0.9em; letter-spacing:.5px; }
@@ -148,9 +181,9 @@ th { background:var(--clr-bg-alt); }
 @media print { body { background:#fff; } .control-bar, .progress-bar, .reading-progress-label { display:none !important; } }
 
 @media (max-width: 720px) {
-    :root { --font-size-base: 1rem; }
-    .reader { padding:2.5rem 1rem 5rem; }
-    .control-bar { flex-direction:row; top:auto; bottom:.75rem; right:50%; transform:translateX(50%); background:var(--clr-bg-alt); padding:.4rem .6rem; border:1px solid var(--clr-border); border-radius:8px; }
-    .control-bar button { font-size:.6rem; padding:.4rem .5rem; }
-    .reading-progress-label { top:auto; bottom:.5rem; left:.5rem; }
+	:root { --font-size-base: 1rem; }
+	.reader { padding:2.5rem 1rem 5rem; }
+	.control-bar { flex-direction:row; top:auto; bottom:.75rem; right:50%; transform:translateX(50%); background:var(--clr-bg-alt); padding:.4rem .6rem; border:1px solid var(--clr-border); border-radius:8px; }
+	.control-bar button { font-size:.6rem; padding:.4rem .5rem; }
+	.reading-progress-label { top:auto; bottom:.5rem; left:.5rem; }
 }

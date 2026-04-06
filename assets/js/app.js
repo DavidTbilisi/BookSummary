@@ -1,111 +1,290 @@
-// Catalog logic: build cards from books.json and handle modal dialog
-async function loadBooks(){
-	try {
-		const res = await fetch('data/books.json');
-		if(!res.ok) throw new Error('books.json load failed');
-		const books = await res.json();
-		buildGrid(books);
-	} catch(err){
-		console.error(err);
-	}
+// ══════════════════════════════════════════
+//  KnowledgeBase — app.js
+//  Catalog + progress tracking
+// ══════════════════════════════════════════
+
+// ── Genre metadata ──────────────────────
+const GENRES = {
+  '001': { key: 'productivity', label: 'Productivity', bg: '#fed7aa', color: '#9a3412' },
+  '002': { key: 'productivity', label: 'Productivity', bg: '#fed7aa', color: '#9a3412' },
+  '003': { key: 'learning',    label: 'Learning',     bg: '#bbf7d0', color: '#14532d' },
+  '004': { key: 'thinking',    label: 'Thinking',     bg: '#bfdbfe', color: '#1e3a5f' },
+  '005': { key: 'thinking',    label: 'Thinking',     bg: '#bfdbfe', color: '#1e3a5f' },
+  '006': { key: 'finance',     label: 'Finance',      bg: '#99f6e4', color: '#134e4a' },
+};
+
+const GENRE_DEFAULT = { key: 'general', label: 'General', bg: '#e5e7eb', color: '#374151' };
+
+// ── Progress (localStorage) ──────────────
+function getStatus(id) {
+  try { return localStorage.getItem(`kb:prog:${id}`) || 'unread'; } catch { return 'unread'; }
+}
+function saveStatus(id, status) {
+  try { localStorage.setItem(`kb:prog:${id}`, status); } catch { /* ignore */ }
 }
 
-function buildGrid(books){
-	const grid = document.getElementById('bookGrid');
-	const template = document.getElementById('book-card-template');
-	if(!grid || !template) return;
-	books.forEach(b => {
-		const clone = template.content.firstElementChild.cloneNode(true);
-		const cover = clone.querySelector('[data-el="cover"]');
-		const titleEl = clone.querySelector('[data-el="title"]');
-		const authorEl = clone.querySelector('[data-el="author"]');
-		const summaryLink = clone.querySelector('[data-el="summaryLink"]');
-		const bookLink = clone.querySelector('[data-el="bookLink"]');
-		const openBtn = clone.querySelector('[data-el="openDesc"]');
-		if(cover){ cover.src = b.cover; cover.alt = b.title; }
-		if(titleEl) titleEl.textContent = b.title;
-		if(authorEl) authorEl.textContent = b.author;
-		if(summaryLink) summaryLink.href = b.summary || '#';
-		if(bookLink) bookLink.href = b.book || '#';
-		if(openBtn) openBtn.addEventListener('click', () => openDialog(b));
-		grid.appendChild(clone);
-	});
+// ── State ────────────────────────────────
+let allBooks   = [];
+let activeGenre = 'all';
+let currentBook = null;
+
+// ── DOM refs ─────────────────────────────
+const grid     = document.getElementById('bookGrid');
+const emptyMsg = document.getElementById('emptyMsg');
+const template = document.getElementById('book-card-tpl');
+const modal    = document.getElementById('modal');
+const modalClose = document.getElementById('modalClose');
+
+// ════════════════════════════════════════
+//  LOAD
+// ════════════════════════════════════════
+async function loadBooks() {
+  try {
+    const res = await fetch('data/books.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    allBooks = await res.json();
+    renderGrid();
+    updateStats();
+  } catch (err) {
+    console.error('Failed to load books.json:', err);
+    if (emptyMsg) { emptyMsg.textContent = 'Failed to load books.'; emptyMsg.classList.remove('hidden'); }
+  }
 }
 
-// Dialog handling (ported from original script.js)
-const dialogEl = document.getElementById('descDialog');
-const dialogCover = document.getElementById('dialogCover');
-const dialogTitle = document.getElementById('dialogTitle');
-const dialogAuthor = document.getElementById('dialogAuthor');
-const dialogBody = document.getElementById('dialogBody');
-const dialogClose = document.getElementById('dialogClose');
-const dialogSummary = document.getElementById('dialogSummary');
-const dialogBook = document.getElementById('dialogBook');
-let lastFocused = null;
+// ════════════════════════════════════════
+//  GRID RENDER
+// ════════════════════════════════════════
+function renderGrid(query = '') {
+  if (!grid || !template) return;
+  grid.innerHTML = '';
 
-function openDialog(b){
-	if(!dialogEl) return;
-	lastFocused = document.activeElement;
-	dialogTitle.textContent = b.title;
-	dialogAuthor.textContent = b.author;
-	dialogBody.textContent='';
-	const p=document.createElement('p'); p.textContent = b.desc || ''; dialogBody.appendChild(p);
-	if(b.cover) dialogCover.src = b.cover; dialogCover.alt = b.title;
-	if(b.summary) dialogSummary.href = b.summary; if(b.book) dialogBook.href = b.book;
-	dialogEl.classList.remove('hidden');
-	trapFocus();
-	dialogClose.focus();
+  let books = activeGenre === 'all'
+    ? allBooks
+    : allBooks.filter(b => (GENRES[b.id] ?? GENRE_DEFAULT).key === activeGenre);
+
+  if (query) {
+    const q = query.toLowerCase();
+    books = books.filter(b =>
+      b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q)
+    );
+  }
+
+  emptyMsg.classList.toggle('hidden', books.length > 0);
+
+  books.forEach(b => {
+    const card = template.content.firstElementChild.cloneNode(true);
+    card.dataset.id = b.id;
+
+    const genre  = GENRES[b.id] ?? GENRE_DEFAULT;
+    const status = getStatus(b.id);
+
+    // Cover
+    const coverEl = card.querySelector('[data-el="cover"]');
+    if (coverEl) { coverEl.src = b.cover || ''; coverEl.alt = b.title; }
+
+    // Status dot
+    const dotEl = card.querySelector('[data-el="dot"]');
+    if (dotEl) dotEl.dataset.status = status;
+
+    // Genre tag
+    const genreEl = card.querySelector('[data-el="genre"]');
+    if (genreEl) {
+      genreEl.textContent = genre.label;
+      genreEl.style.background = genre.bg;
+      genreEl.style.color = genre.color;
+    }
+
+    // Text
+    const titleEl  = card.querySelector('[data-el="title"]');
+    const authorEl = card.querySelector('[data-el="author"]');
+    if (titleEl)  titleEl.textContent  = b.title;
+    if (authorEl) authorEl.textContent = b.author;
+
+    // Progress bar
+    applyProgressBar(card, status);
+
+    // Summary link
+    const summaryLink = card.querySelector('[data-el="summaryLink"]');
+    if (summaryLink) {
+      const hasSummary = b.summary && b.summary !== '#';
+      summaryLink.href = hasSummary ? b.summary : '#';
+      if (!hasSummary) summaryLink.dataset.disabled = '';
+      summaryLink.addEventListener('click', e => { e.stopPropagation(); if (!hasSummary) e.preventDefault(); });
+    }
+
+    // Details button
+    const moreBtn = card.querySelector('[data-el="moreBtn"]');
+    if (moreBtn) moreBtn.addEventListener('click', e => { e.stopPropagation(); openModal(b); });
+
+    // Whole card click → modal
+    card.addEventListener('click', () => openModal(b));
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(b); } });
+
+    grid.appendChild(card);
+  });
 }
-function closeDialog(){
-	if(!dialogEl) return; dialogEl.classList.add('hidden'); if(lastFocused) lastFocused.focus();
+
+// Apply/update progress bar colour + width on a card element
+function applyProgressBar(card, status) {
+  const fill = card.querySelector('[data-el="progFill"]');
+  if (!fill) return;
+  const width = status === 'finished' ? '100%' : status === 'reading' ? '50%' : '0%';
+  const color = status === 'finished' ? '#34d399' : '#fbbf24';
+  fill.style.width = width;
+  fill.style.background = status === 'unread' ? '' : color;
 }
-if(dialogClose) dialogClose.addEventListener('click', closeDialog);
-if(dialogEl){
-	dialogEl.addEventListener('click', e => { if(e.target === dialogEl || e.target === dialogEl.firstElementChild) closeDialog(); });
+
+// ════════════════════════════════════════
+//  STATS
+// ════════════════════════════════════════
+function updateStats() {
+  const counts = { unread: 0, reading: 0, finished: 0 };
+  allBooks.forEach(b => { counts[getStatus(b.id)]++; });
+
+  const total = allBooks.length;
+  const pct   = total ? Math.round((counts.finished / total) * 100) : 0;
+
+  setText('statTotal',    total);
+  setText('statReading',  counts.reading);
+  setText('statFinished', counts.finished);
+  setText('statPct',      `${pct}% დასრულებული`);
+
+  const fill = document.getElementById('statBarFill');
+  if (fill) fill.style.width = pct + '%';
+
+  const bar = document.getElementById('statBar');
+  if (bar) bar.setAttribute('aria-valuenow', pct);
 }
-window.addEventListener('keydown', e => {
-	if(e.key === 'Escape' && !dialogEl.classList.contains('hidden')) closeDialog();
-	if(e.key === 'Tab' && !dialogEl.classList.contains('hidden')) handleTab(e);
+
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+// ════════════════════════════════════════
+//  MODAL
+// ════════════════════════════════════════
+function openModal(b) {
+  currentBook = b;
+  const genre  = GENRES[b.id] ?? GENRE_DEFAULT;
+  const status = getStatus(b.id);
+
+  document.getElementById('modalCover').src  = b.cover || '';
+  document.getElementById('modalCover').alt  = b.title;
+  document.getElementById('modalTitle').textContent  = b.title;
+  document.getElementById('modalAuthor').textContent = b.author;
+  document.getElementById('modalDesc').textContent   = b.desc || '';
+
+  const hasSummary = b.summary && b.summary !== '#';
+  const hasBook    = b.book    && b.book    !== '#';
+  document.getElementById('modalSummary').href = hasSummary ? b.summary : '#';
+  document.getElementById('modalBook').href    = hasBook    ? b.book    : '#';
+
+  const genreEl = document.getElementById('modalGenre');
+  genreEl.textContent     = genre.label;
+  genreEl.style.background = genre.bg;
+  genreEl.style.color      = genre.color;
+
+  setActiveProgBtn(status);
+
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  modalClose.focus();
+}
+
+function closeModal() {
+  modal.classList.add('hidden');
+  document.body.style.overflow = '';
+  currentBook = null;
+}
+
+function setActiveProgBtn(status) {
+  document.querySelectorAll('.prog-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.status === status);
+  });
+}
+
+// Progress button clicks
+document.querySelectorAll('.prog-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!currentBook) return;
+    const status = btn.dataset.status;
+    saveStatus(currentBook.id, status);
+    setActiveProgBtn(status);
+
+    // Reflect in the card without re-rendering everything
+    const card = grid?.querySelector(`[data-id="${currentBook.id}"]`);
+    if (card) {
+      const dot = card.querySelector('[data-el="dot"]');
+      if (dot) dot.dataset.status = status;
+      applyProgressBar(card, status);
+    }
+    updateStats();
+  });
 });
-function trapFocus(){
-	const focusables = dialogEl.querySelectorAll('a, button, textarea, input, select, [tabindex]:not([tabindex="-1"])');
-	dialogEl.__focusables = Array.from(focusables);
-}
-function handleTab(e){
-	const list = dialogEl.__focusables; if(!list || !list.length) return;
-	const first = list[0]; const last = list[list.length-1];
-	if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
-	else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
-}
-window.openBookDialog = openDialog;
 
-// Footer year
-const yearEl = document.getElementById('year'); if(yearEl) yearEl.textContent = new Date().getFullYear();
+// Close handlers
+if (modalClose) modalClose.addEventListener('click', closeModal);
+if (modal) modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
 
-// Search filter
-const search = document.getElementById('search');
-if(search){
-	search.addEventListener('input', () => {
-		const q = search.value.trim().toLowerCase();
-		document.querySelectorAll('#bookGrid article').forEach(card => {
-			const t = card.querySelector('[data-el="title"]').textContent.toLowerCase();
-			const a = card.querySelector('[data-el="author"]').textContent.toLowerCase();
-			card.style.display = (t.includes(q) || a.includes(q)) ? '' : 'none';
-		});
-	});
-	window.addEventListener('keydown', e => { if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); search.focus(); }});
+window.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+    e.preventDefault();
+    document.getElementById('search')?.focus();
+  }
+});
+
+// ════════════════════════════════════════
+//  SEARCH
+// ════════════════════════════════════════
+const searchInput = document.getElementById('search');
+if (searchInput) {
+  searchInput.addEventListener('input', () => renderGrid(searchInput.value.trim()));
 }
 
+// ════════════════════════════════════════
+//  GENRE FILTER
+// ════════════════════════════════════════
+document.querySelectorAll('.genre-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.genre-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    activeGenre = pill.dataset.genre;
+    renderGrid(searchInput?.value.trim() || '');
+  });
+});
+
+// ════════════════════════════════════════
+//  THEME
+// ════════════════════════════════════════
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  try { localStorage.setItem('kb:theme', theme); } catch { /* ignore */ }
+  const icon = document.querySelector('.theme-icon');
+  if (icon) icon.textContent = theme === 'dark' ? '🌙' : '☀️';
+}
+
+const themeToggle = document.getElementById('themeToggle');
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+}
+
+// Sync icon to stored theme on load
+(function syncThemeIcon() {
+  try {
+    const t = localStorage.getItem('kb:theme') || 'light';
+    const icon = document.querySelector('.theme-icon');
+    if (icon) icon.textContent = t === 'dark' ? '🌙' : '☀️';
+  } catch { /* ignore */ }
+})();
+
+// ── Footer year ──────────────────────────
+const yearEl = document.getElementById('year');
+if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+// ── Boot ─────────────────────────────────
 document.addEventListener('DOMContentLoaded', loadBooks);
-
-// Catalog theme chooser
-const themeSelect = document.getElementById('themeSelect');
-function applyCatalogTheme(theme){
-	document.documentElement.setAttribute('data-theme', theme);
-	try{ localStorage.setItem('catalogTheme', theme); }catch(e){}
-}
-if(themeSelect){
-	// Initialize select to stored value
-	try{ const stored = localStorage.getItem('catalogTheme'); if(stored){ themeSelect.value = stored; } }catch(e){}
-	themeSelect.addEventListener('change', () => applyCatalogTheme(themeSelect.value));
-}

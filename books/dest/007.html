@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<div class="reader-page" data-words="278" data-read-min="1">
+<div class="reader-page" data-words="597" data-read-min="3">
 
   <!-- ── Hero ── -->
   <header class="book-hero" style="--cover-url:url('https://m.media-amazon.com/images/I/51SrO5oPAqL._SY522_.jpg')">
@@ -30,9 +30,9 @@
         <div class="hero-chips">
           <span class="chip chip--time">
             <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-            ~1 min read
+            ~3 min read
           </span>
-          <span class="chip chip--words">278 words</span>
+          <span class="chip chip--words">597 words</span>
           <a href="https://www.amazon.com/Art-Systems-Thinking-Essential-Creativity/dp/0722534426" target="_blank" rel="noopener" class="chip chip--buy">Buy book ↗</a>
         </div>
         
@@ -66,125 +66,280 @@
   <!-- ── Article content ── -->
   <article class="reader-wrap">
     <div class="reader-content" id="readerContent">
-<h1>სისტემური აზროვნების ხელოვნება — რეზიუმე</h1>
-<h2>მიმოხილვა</h2>
-<p>„სისტემური აზროვნების ხელოვნება“ ხსნის, თუ როგორ გავიგოთ რთული პრობლემები მათი აღქმით, როგორც ურთიერთდაკავშირებული სისტემების და არა როგორც იზოლირებული მოვლენების. რეალურ სამყაროში არსებული პრობლემების უმეტესობა ვერ გადაიჭრება ხაზოვანი აზროვნებით; ისინი მოითხოვენ ფოკუსირებას ურთიერთობებზე, უკუკავშირის მარყუჟებზე და დროში ჩამოყალიბებულ პატერნებზე.</p>
+<h1>სისტემური აზროვნების ხელოვნება — სიღრმისეული პრაქტიკული რეზიუმე</h1>
+<hr>
+<h2>0. რას მოგცემთ ეს დოკუმენტი</h2>
+<p>ეს დოკუმენტი ცვლის წიგნს. იგი სტრუქტურირებულია <strong>გამოყენებისთვის</strong>, არა მხოლოდ თეორიისთვის.</p>
+<p>თუ ამას გაითავისებთ, თქვენ შეძლებთ:</p>
+<ul>
+<li>პრობლემების სწრაფ დიაგნოსტირებას</li>
+<li>არასწორ გადაჭრის გზებზე ენერგიის ხარჯვის შეწყვეტას</li>
+<li>ისეთი სისტემების აგებას, რომლებიც ავტომატურად მუშაობენ</li>
+</ul>
+<hr>
+<h2>1. მთავარი ცვლილება: მოვლენები → სისტემები</h2>
+<p><strong>ჩვეულებრივი აზროვნება</strong></p>
+<pre><code class="language-mermaid">flowchart LR
+  Event[მოვლენა] --&gt; Reaction[რეაქცია]
+</code></pre>
+<p><strong>სისტემური აზროვნება</strong></p>
+<pre><code class="language-mermaid">flowchart LR
+  Structure[სტრუქტურა] --&gt; Patterns[კანონზომიერებები] --&gt; Events[მოვლენები]
+</code></pre>
+<h3>ინტერპრეტაცია</h3>
+<ul>
+<li><strong>მოვლენები</strong> — რასაც ხედავთ</li>
+<li><strong>კანონზომიერებები (Patterns)</strong> — ტენდენციები დროში</li>
+<li><strong>სტრუქტურა</strong> — საფუძვლად მდებარე სისტემა, რომელიც ყველაფერს წარმოშობს</li>
+</ul>
+<h3>მაგალითი (სტუდენტი)</h3>
+<ul>
+<li><strong>მოვლენა:</strong> ჩაჭრილი გამოცდა</li>
+<li><strong>კანონზომიერება:</strong> დაბალი მოსწრება რამდენიმე საგანში</li>
+<li><strong>სტრუქტურა:</strong> გამეორების ციკლის არარსებობა + spaced repetition-ის ნაკლებობა</li>
+</ul>
+<p>👉 მოვლენის გამოსწორება = <strong>უსარგებლოა</strong>
+👉 სტრუქტურის გამოსწორება = <strong>მუდმივი შედეგი</strong></p>
+<hr>
+<h2>2. რა არის სისტემა (ზუსტი განმარტება)</h2>
+<p><strong>სისტემა = ელემენტები + კავშირები + მიზანი</strong></p>
+<pre><code class="language-mermaid">flowchart LR
+  Elements[ელემენტები] --&gt; Connections[კავშირები] --&gt; Behavior[ქცევა] --&gt; Purpose[მიზანი]
+</code></pre>
+<h3>მაგალითი (სავარჯიშო დარბაზი)</h3>
+<ul>
+<li><strong>ელემენტები:</strong> სხეული, საკვები, ვარჯიშები</li>
+<li><strong>კავშირები:</strong> ჩვევები, განრიგი</li>
+<li><strong>მიზანი:</strong> ადაპტაცია (გაძლიერება)</li>
+</ul>
+<p>👉 ცუდი შედეგები ⇒ პრობლემა <strong>კავშირებშია</strong>, არა ძალისხმევაში</p>
+<hr>
+<h2>3. სტრუქტურა განსაზღვრავს ქცევას (მწარე სიმართლე)</h2>
+<pre><code class="language-mermaid">flowchart LR
+  Structure[სისტემის სტრუქტურა] --&gt; Behavior[ქცევა] --&gt; Results[შედეგები]
+</code></pre>
+<h3>მაგალითი (პროდუქტიულობა)</h3>
+<ul>
+<li>შეტყობინებები ჩართული → ყურადღების გაფანტვა → დაბალი შედეგი</li>
+<li>შეტყობინებები გამორთული → ფოკუსი → მაღალი შედეგი</li>
+</ul>
+<p>👉 ერთი და იგივე ადამიანი. განსხვავებული სისტემა.</p>
 <blockquote>
-<p><strong>სისტემა</strong> არის ერთიანობა, რომელიც ინარჩუნებს თავის არსებობას და ფუნქციონირებს როგორც მთლიანობა მისი ნაწილების ურთიერთქმედების შედეგად.</p>
+<p><strong>დასკვნა:</strong> პრობლემა დისციპლინაში კი არა, <strong>სისტემის დიზაინშია</strong></p>
 </blockquote>
 <hr>
-<h2>მთავარი იდეა: სწორხაზოვანი აზროვნებიდან სისტემურ აზროვნებამდე</h2>
-<ul>
-<li><strong>სწორხაზოვანი</strong> (მცდარია რთული სისტემებისთვის): A → B → C</li>
-<li><strong>სისტემური</strong> (სწორია): A ↔ B ↔ C (წრიული მიზეზ-შედეგობრიობა)</li>
-</ul>
+<h2>4. უკუკავშირის მარყუჟები — ძრავი</h2>
+<p>ყველაფერი მნიშვნელოვანი არის <strong>მარყუჟი (loop)</strong>.</p>
+<h3>4.1 გამაძლიერებელი მარყუჟი (ზრდა / კოლაფსი)</h3>
 <pre><code class="language-mermaid">flowchart LR
-  A[მიზეზი] --&gt; B[შედეგი]
-  B --&gt; C[შემდეგი შედეგი]
-</code></pre>
-<h3>სისტემური ციკლი</h3>
-<pre><code class="language-mermaid">flowchart LR
-  A[მდგომარეობა A] --&gt; B[მდგომარეობა B]
-  B --&gt; C[მდგომარეობა C]
-  C --&gt; A
-</code></pre>
-<h3>გროვა vs სისტემა</h3>
-<pre><code class="language-mermaid">flowchart LR
-  subgraph Heap [გროვა]
-    H1[ნაწილი]
-    H2[ნაწილი]
-    H3[ნაწილი]
-  end
-
-  subgraph System [სისტემა]
-    S1[ნაწილი] --&gt; S2[ნაწილი]
-    S2 --&gt; S3[ნაწილი]
-    S3 --&gt; S1[ნაწილი]
-  end
+  Action[მოქმედება] --&gt; Result[შედეგი]
+  Result --&gt; Motivation[მოტივაცია]
+  Motivation --&gt; Action
 </code></pre>
 <ul>
-<li>გროვა (Heap): ნაწილებს შორის მნიშვნელოვნად არ არის ურთიერთქმედება.</li>
-<li>სისტემა (System): ნაწილები ურთიერთდამოკიდებულ შედეგებს ქმნიან; აქ შეიძლება წარმოიქმნას ემერჯენცია.</li>
+<li><strong>პოზიტიური (სწავლა):</strong> პრობლემების გადაჭრა → გაუმჯობესება → თავდაჯერებულობა → მეტი ამოცანის გადაჭრა</li>
+<li><strong>ნეგატიური (არიდება):</strong> დავალების არიდება → შვება → მეტი არიდება → უნარის დეგრადაცია</li>
 </ul>
-<h3>ემერჯენცია</h3>
+<blockquote>
+<p><strong>წესი:</strong> გამაძლიერებელი მარყუჟები დროში მცირე სხვაობებს <strong>მასშტაბურს</strong> ხდიან</p>
+</blockquote>
+<h3>4.2 დამაბალანსებელი მარყუჟი (სტაბილურობა)</h3>
 <pre><code class="language-mermaid">flowchart LR
-  N1[ნეირონი] --&gt; N2[ნეირონი]
-  N2 --&gt; N3[ნეირონი]
-  N3 --&gt; M[გონება / ცნობიერება]
+  Goal[მიზანი] --&gt; Gap[ნაპრალი]
+  Gap --&gt; Action[მოქმედება]
+  Action --&gt; ReduceGap[ნაპრალის შემცირება]
 </code></pre>
-<p>ემერჯენტული თვისებები წარმოიქმნება ნაწილების ურთიერთქმედების შედეგად და არ არის უბრალოდ მათი ერთეულების ჯამი.</p>
-<h2>უკუკავშირის მარყუჟები (Feedback Loops)</h2>
-<h3>გამაძლიერებელი მარყუჟი (Reinforcing)</h3>
+<p><strong>მაგალითი (სხეულის წონა):</strong> ნაკლების ჭამა → წონის კლება → შიმშილის ზრდა → მეტის ჭამა</p>
+<blockquote>
+<p><strong>წესი:</strong> თუ ცვლილება რთულია — დამაბალანსებელი მარყუჟი <strong>გეწინააღმდეგებათ</strong></p>
+</blockquote>
+<hr>
+<h2>5. მარყუჟების კომბინაცია (რეალური სისტემები)</h2>
 <pre><code class="language-mermaid">flowchart LR
-  A[მეტი წარმატება] --&gt; B[მეტი თავდაჯერებულობა]
-  B --&gt; C[უკეთესი ქმედებები]
-  C --&gt; A
+  Effort[ძალისხმევა] --&gt; Skill[უნარი] --&gt; Results[შედეგი] --&gt; Motivation[მოტივაცია] --&gt; Effort
+  Results --&gt; Fatigue[დაღლა] --&gt; ReducedEffort[შემცირებული ძალისხმევა]
 </code></pre>
-<h3>დამაბალანსებელი მარყუჟი (Balancing)</h3>
-<pre><code class="language-mermaid">flowchart LR
-  A[სასურველი მდგომარეობა] --&gt; B[ხარვეზი]
-  B --&gt; C[ქმედება]
-  C --&gt; A
-</code></pre>
-<p>დამაბალანსებელი მარყუჟები ინარჩუნებენ სისტემის სტაბილურობას; გამაძლიერებელი მარყუჟები აჩქარებენ ცვლილებებს.</p>
-<h2>წრიული აზროვნება და დაყოვნება</h2>
-<h3>წრიული აზროვნება</h3>
-<pre><code class="language-mermaid">flowchart LR
-  Stress[სტრესი] --&gt; PoorPerformance[ცუდი შედეგები]
-  PoorPerformance --&gt; MoreStress[მეტი სტრესი]
-</code></pre>
-<h3>დაყოვნება (Delay)</h3>
-<pre><code class="language-mermaid">flowchart LR
-  Action[ქმედება] --&gt;|დაყოვნება| Result[შედეგი]
-  Result --&gt; Feedback[უკუკავშირი]
-</code></pre>
-<p>დაყოვნება ხშირად ამახინჯებს სისტემის რეალურ შედეგებს და აფერხებს სწორი რეაგირების მიღებას.</p>
-<h2>გაუთვალისწინებელი შედეგები</h2>
-<pre><code class="language-mermaid">flowchart LR
-  Fix[გამოსავალი] --&gt; ShortTermRelief[მოკლევადიანი შვება]
-  ShortTermRelief --&gt; LongTermProblem[გრძელვადიანი პრობლემა]
-  LongTermProblem --&gt; NeedForMoreFix[მეტი გამოსავლის საჭიროება]
-</code></pre>
-<p>ეს არის კლასიკური &quot;Fixes that fail&quot; პათერნი — სწრაფი გასწორება, რომელიც შექმნის უფრო მტავიან პრობლემებს.</p>
-<h2>ბერკეტის წერტილები (Leverage Points)</h2>
-<pre><code class="language-mermaid">flowchart LR
-  SmallChange[მცირე ცვლილება] --&gt; SystemStructure[სისტემის სტრუქტურა]
-  SystemStructure --&gt; BigOutcome[დიდი შედეგი]
-</code></pre>
-<p>ფოკუსირდით სტრუქტურაზე და უკუკავშირზე — მცირედული, მიზნობრივი ცვლილებები ხშირად უფრო ეფექტურია.</p>
-<h2>მენტალური მოდელები და დამახინჯება</h2>
-<pre><code class="language-mermaid">flowchart LR
-  Reality[რეალობა] --&gt; Perception[აღქმა]
-  Perception --&gt; Beliefs[რწმენები]
-  Beliefs --&gt; Actions[ქმედებები]
-  Actions --&gt; Reality
-</code></pre>
-<pre><code class="language-mermaid">flowchart LR
-  Reality[რეალობა] --&gt; Deletion[ამოშლა]
-  Reality --&gt; Distortion[დამახინჯება]
-  Reality --&gt; Generalization[განზოგადება]
-</code></pre>
-<p>მენტალური მოდელები დაგვეხმარებიან სირთულის შეჯამებაში, მაგრამ შეიძლება წარმოშვას დამახინჯებული ხედვა.</p>
-<h2>სისტემური არქეტიპები</h2>
 <ul>
-<li>მანკიერი ციკლი — პრობლემა თავის თავს კვებავს.</li>
-<li>გამოსავალი, რომელიც მარცხდება — მოკლევადიანი შვება, გრძელვადიანი პრობლემა.</li>
-<li>პასუხისმგებლობის გადატანა — მოკლევადიანი გადაწყვეტილება ხანგრძლივ დამოკიდებულებას ქმნის.</li>
+<li>პროგრესი ზრდის მოტივაციას (<strong>გამაძლიერებელი</strong>)</li>
+<li>დაღლა ამცირებს აქტივობას (<strong>დამაბალანსებელი</strong>)</li>
 </ul>
-<h2>ძირითადი პრინციპები</h2>
+<p>👉 ოსტატობა = ორივე მარყუჟის მართვა</p>
+<hr>
+<h2>6. დროის დაყოვნება (ფარული მკვლელი)</h2>
+<pre><code class="language-mermaid">flowchart LR
+  Action[მოქმედება] --&gt;|დაყოვნება| Result[შედეგი] --&gt; Feedback[უკუკავშირი]
+</code></pre>
 <ul>
-<li>სტრუქტურა განსაზღვრავს ქცევას.</li>
-<li>ყველაფერი დაკავშირებულია.</li>
-<li>უკუკავშირის მარყუჟები მართავენ სისტემებს.</li>
-<li>დაყოვნება ამახინჯებს აღქმას.</li>
-<li>მცირე ცვლილებებს ხშირად დიდი ეფექტი აქვს.</li>
+<li>სწავლა დღეს → შედეგი კვირებში</li>
+<li>ცუდი ძილი → ზიანი გროვდება → მოგვიანებით კრახი</li>
 </ul>
+<p><strong>შეცდომა:</strong></p>
+<pre><code class="language-mermaid">flowchart LR
+  Action --&gt; NoImmediateResult[მყისიერი შედეგი არაა] --&gt; Quit[დანებება]
+</code></pre>
+<p><strong>სწორი მიდგომა:</strong></p>
+<ul>
+<li>წინასწარ განსაზღვრე ჰორიზონტი</li>
+<li>იგნორირება გაუკეთე მოკლევადიან სიგნალებს</li>
+</ul>
+<p>👉 თუ დაყოვნება არსებობს — ენდე პროცესს, არა ემოციებს</p>
+<hr>
+<h2>7. არაწრფივი ეფექტები</h2>
+<pre><code class="language-mermaid">flowchart LR
+  SmallInput[მცირე ცვლილება] --&gt; Amplification[გამაძლიერებელი ეფექტი] --&gt; LargeOutcome[დიდი შედეგი]
+</code></pre>
+<p>მაგალითი: 1% ყოველდღიური გაუმჯობესება → მასშტაბური წლიური ზრდა</p>
+<p>👉 სისტემები <strong>არ არის წრფივი</strong></p>
+<hr>
+<h2>8. „მუშაობს, მაგრამ მარცხდება“ (Fixes That Fail)</h2>
+<pre><code class="language-mermaid">flowchart LR
+  Problem[პრობლემა] --&gt; Fix[სწრაფი გამოსავალი]
+  Fix --&gt; Relief[მოკლევადიანი შვება]
+  Relief --&gt; HiddenDamage[ფარული ზიანი]
+  HiddenDamage --&gt; BiggerProblem[უფრო დიდი პრობლემა]
+</code></pre>
+<ul>
+<li>ტკივილი → აბები → მიზეზის იგნორირება → გაუარესება</li>
+<li>კოდში ჰაკი → მუშაობს → ტექნიკური ვალი → კრახი</li>
+</ul>
+<blockquote>
+<p><strong>წესი:</strong> თუ გამოსავალი მაშინვე მუშაობს — იყავით <strong>ეჭვიანი</strong></p>
+</blockquote>
+<hr>
+<h2>9. პასუხისმგებლობის გადატანა (Shifting the Burden)</h2>
+<pre><code class="language-mermaid">flowchart LR
+  Problem[პრობლემა] --&gt; SymptomFix[სიმპტომის მკურნალობა]
+  Problem --&gt; RootFix[ფუნდამენტური გადაწყვეტა]
+  SymptomFix --&gt; Dependency[დამოკიდებულება]
+  Dependency --&gt; WeakSystem[სუსტი სისტემა]
+</code></pre>
+<p>მაგალითი: StackOverflow → კოდის კოპირება → გაგების გარეშე</p>
+<p>👉 აგვარებთ დავალებას, არა კომპეტენციას</p>
+<p><strong>წესი:</strong> ეს მაძლიერებს თუ მასუსტებს?</p>
+<hr>
+<h2>10. ბერკეტის წერტილები (Leverage Points)</h2>
+<pre><code class="language-mermaid">flowchart LR
+  Leverage[ბერკეტი] --&gt; Change[სისტემური ცვლილება] --&gt; Impact[დიდი გავლენა]
+</code></pre>
+<p><strong>ძალა (ზემოდან ქვემოთ):</strong></p>
+<ol>
+<li>წესები</li>
+<li>ინფორმაციის ნაკადი</li>
+<li>სტრუქტურა</li>
+<li>პარამეტრები (სუსტი)</li>
+</ol>
+<p><strong>მაგალითი (სწავლა):</strong></p>
+<ul>
+<li>❌ მეტი მეცადინეობა (პარამეტრი)</li>
+<li>✅ ფიქსირებული გრაფიკი (სტრუქტურა)</li>
+<li>✅ ტელეფონის მოცილება (გარემო)</li>
+</ul>
+<p>👉 შეცვალეთ სისტემა, არა ძალისხმევა</p>
+<hr>
+<h2>11. მენტალური მოდელები = შიდა სისტემები</h2>
+<pre><code class="language-mermaid">flowchart LR
+  Belief[რწმენა] --&gt; Action[მოქმედება] --&gt; Result[შედეგი] --&gt; Reinforce[რწმენის განმტკიცება]
+</code></pre>
+<p>მაგალითი: „კოდირება არ მეხერხება“ → არ ვვარჯიშობ → ცუდი შედეგი → რწმენა მტკიცდება</p>
+<p>👉 მარყუჟი ბლოკავს იდენტობას</p>
+<p><strong>გატეხვა:</strong> შექმენით საწინააღმდეგო მტკიცებულება</p>
+<hr>
+<h2>12. აზროვნების დამახინჯებები</h2>
+<pre><code class="language-mermaid">flowchart LR
+  Reality[რეალობა] --&gt; Perception[აღქმა] --&gt; Decision[გადაწყვეტილება]
+</code></pre>
+<ul>
+<li>წაშლა (Deletion)</li>
+<li>დამახინჯება (Distortion)</li>
+<li>განზოგადება (Generalization)</li>
+</ul>
+<p>👉 საჭიროა <strong>ზუსტი მონაცემი</strong></p>
+<hr>
+<h2>13. სისტემური არქეტიპები</h2>
+<h3>13.1 მანკიერი წრე</h3>
+<pre><code class="language-mermaid">flowchart LR
+  Problem --&gt; Worse --&gt; BiggerProblem
+</code></pre>
+<p>მაგალითი: სტრესი → ცუდი ძილი → მეტი სტრესი</p>
+<h3>13.2 წარმატება წარმატებულს</h3>
+<pre><code class="language-mermaid">flowchart LR
+  SuccessA --&gt; Resources --&gt; MoreSuccessA
+  SuccessB --&gt; LessResources --&gt; DeclineB
+</code></pre>
+<h3>13.3 ზრდის ლიმიტები</h3>
+<pre><code class="language-mermaid">flowchart LR
+  Growth --&gt; Constraint --&gt; SlowsGrowth
+</code></pre>
+<hr>
+<h2>14. პრაქტიკული დიზაინი (ნაბიჯები)</h2>
+<ol>
+<li>იპოვე პატერნი (რა მეორდება?)</li>
+<li>დახაზე მარყუჟი</li>
+</ol>
+<pre><code class="language-mermaid">flowchart LR
+  Action --&gt; Result --&gt; Feedback --&gt; Action
+</code></pre>
+<ol start="3">
+<li>განსაზღვრე ტიპი (reinforcing / balancing)</li>
+<li>იპოვე დაყოვნება</li>
+<li>აირჩიე ბერკეტი (შეცვალე სტრუქტურა)</li>
+</ol>
+<hr>
+<h2>15. რეალური გამოყენებები</h2>
+<h3>15.1 სწავლა</h3>
+<pre><code class="language-mermaid">flowchart LR
+  Study --&gt; Practice --&gt; Feedback --&gt; Retention --&gt; Study
+</code></pre>
+<ul>
+<li>დაამატე spaced repetition</li>
+<li>დაამატე ტესტირების მარყუჟი</li>
+</ul>
+<h3>15.2 პროდუქტიულობა</h3>
+<pre><code class="language-mermaid">flowchart LR
+  Environment --&gt; Focus --&gt; Output --&gt; Satisfaction --&gt; Motivation
+</code></pre>
+<p>👉 ყველაზე ძლიერი ბერკეტი = გარემო</p>
+<h3>15.3 ჯანმრთელობა</h3>
+<pre><code class="language-mermaid">flowchart LR
+  Sleep --&gt; Energy --&gt; Activity --&gt; Health --&gt; Sleep
+</code></pre>
+<p>👉 ჯერ ძილი</p>
+<h3>15.4 ფული</h3>
+<pre><code class="language-mermaid">flowchart LR
+  Income --&gt; Investment --&gt; Growth --&gt; Income
+</code></pre>
+<p>👉 გამაძლიერებელი მარყუჟი = სიმდიდრე</p>
+<hr>
+<h2>16. ანტი-პატერნები</h2>
+<ul>
+<li>მოვლენებზე რეაგირება</li>
+<li>დაყოვნებების იგნორირება</li>
+<li>სწრაფი ფიქსები</li>
+<li>ადამიანების დადანაშაულება</li>
+<li>ძალისხმევის ზრდა სისტემის შეცვლის ნაცვლად</li>
+</ul>
+<hr>
+<h2>17. მეტა-ხედვა</h2>
+<pre><code class="language-mermaid">flowchart LR
+  Awareness --&gt; Decisions --&gt; Systems --&gt; Results
+</code></pre>
+<p>სისტემური აზროვნება = მეტა-უნარი</p>
+<hr>
+<h2>18. შეკუმშვა</h2>
+<ul>
+<li>ყველაფერი მარყუჟია</li>
+<li>სტრუქტურა &gt; ძალისხმევა</li>
+<li>დაყოვნება ამახინჯებს რეალობას</li>
+<li>მიზეზები &gt; სიმპტომები</li>
+<li>მცირე ბერკეტი → დიდი შედეგი</li>
+</ul>
+<hr>
 <h2>დასკვნა</h2>
-<p>პრობლემების უმეტესობა სისტემურ სტრუქტურებს უკავშირდება. ფოკუსირება სტრუქტურაზე, უკუკავშირზე და ბერკეტებსა და არა მხოლოდ სიმპტომებზე, გვეშველება მდგრადი გადაწყვეტილებებისკენ.</p>
 <pre><code class="language-mermaid">flowchart LR
-  Events[მოვლენები] --&gt; Patterns[პატერნები]
-  Patterns --&gt; Structure[სტრუქტურა]
+  System --&gt; Behavior --&gt; Outcome
 </code></pre>
+<p>შენ არ ადიხარ მიზნებამდე — ეცემი შენს სისტემებამდე.</p>
+<p>სწორი სისტემა → გარდაუვალი შედეგი</p>
 
     </div>
   </article>

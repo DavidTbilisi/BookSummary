@@ -1,13 +1,12 @@
 mixin book(item)
   .book
-      .book__cover
-      img(src=item.img, alt='book cover')
-      h2.book__title= item.title
-      h3.book__author= item.author
-      p.book__desc= item.desc
-      .buttons
-        a.go-to-summary(href=item.summary_url, target="_blank") შეჯამების წაკითხვა
-        a.go-to-book(href=item.book_url, target="_blank") წიგნის წაკითხვა
+    .book__cover
+      img(src=item.img, alt='წიგნის ყდა')
+    h2.book__title= item.title
+    h3.book__author= item.author
+    p.book__desc= item.desc
+    .buttons
+      a.go-to-summary(href=item.summary_url, target="_blank") შეჯამების წაკითხვა
 
 -
   let books = [
@@ -47,29 +46,98 @@ mixin book(item)
       
 
 doctype html
-html(lang='en')
+html(lang='ka')
   head
     meta(charset='UTF-8')
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
-    title წიგნების შეჯამება
-    link(rel='stylesheet' href='style.css')
+    title წიგნების შეჯამების პროექტი
+    link(rel='stylesheet' href='assets/css/main.css')
   body
-    .header
-      nav
-        ul
-          li
-            a(href='#') მთავარი
-          li
-            a(href='#') პოპულარული
-          li
-            a(href='#') ჩვენს შესახებ
-    .intro
-      h1 საიტის შესახებ
-      p ეს ვებსაიტი შეიცავს მოკლე შეჯამებებს (რეზიუმეებს) წიგნების მთავარ იდეებზე, პრაქტიკულ დასკვნებზე და რეკომენდაციებზე. თითოეული ჩანაწერი გთავაზობთ მოკლე მიმოხილვას, ავტორის სახელწოდებას და ბმულს სრულ რესურსამდე (თუ ხელმისაწვდომია).
-      p.small როგორ გამოვიყენოთ
-      ul.how-to
-        li დააჭირეთ "შეჯამების წაკითხვა" წიგნის რეზიუმეს სანახავად.
-        li დააჭირეთ "წიგნის წაკითხვა" სრულ ვერსიაზე გადასასვლელად (ასეთის არსებობის შემთხვევაში).
-    .grid-container
-      each b in books
-        +book(b)
+    .page-shell
+      .app-container
+        header.site-header
+          .header-pill
+            a.logo(href='index.html') წიგნების შეჯამების პროექტი
+            button.theme-toggle#themeToggle(type='button' aria-label='Toggle theme')
+              span.theme-icon 🌙
+
+        .search-section
+          p.search-tagline მოკლე შეჯამებები გავლენიანი წიგნებიდან — მთავარი იდეები, პრაქტიკული დასკვნები
+          .search-wrap
+            input#search.search-input(type='search' placeholder='ძებნა: სათაური ან ავტორი …')
+            .search-icon 🔍
+            span.search-kbd Ctrl K
+
+        .genre-section
+          .genre-pills
+            button.genre-pill.genre-pill--all.active(data-genre='all') ყველა
+            button.genre-pill(data-genre='productivity') პროდუქტიულობა
+            button.genre-pill(data-genre='learning') სწავლა
+            button.genre-pill(data-genre='thinking') აზროვნება
+            button.genre-pill(data-genre='psychology') ფსიქოლოგია
+            button.genre-pill(data-genre='finance') ფინანსები
+            button.genre-pill(data-genre='general') ზოგადი
+
+        .stats-bar
+          .stat-item
+            .stat-value(id='statTotal') 0
+            .stat-label წიგნების რაოდენობა
+          .stat-divider
+          .stat-item
+            .stat-value.stat-value--reading(id='statReading') 0
+            .stat-label წიგნი მიმდინარეობაში
+          .stat-divider
+          .stat-item
+            .stat-value.stat-value--done(id='statFinished') 0
+            .stat-label დასრულებული
+          .stat-item--progress
+            .stat-label(id='statPct') 0% დასრულებული
+            .stat-bar#statBar(role='progressbar' aria-valuemin='0' aria-valuemax='100' aria-valuenow='0')
+              .stat-bar-fill#statBarFill(style='width:0%')
+
+        section.books-section
+          .books-grid#bookGrid
+          .empty-msg#emptyMsg.hidden არაფერი წიგნები არ მოიძებნა
+
+        //- Template used by app.js to render each book card
+        template#book-card-tpl
+          article.book-card(tabindex='0')
+            .card-cover-wrap
+              img.card-cover(data-el='cover' src='' alt='')
+              .card-status-dot(data-el='dot' data-status='unread' aria-hidden='true')
+            .card-body
+              span.card-genre-tag(data-el='genre')
+              h3.card-title(data-el='title')
+              p.card-author(data-el='author')
+              .card-prog-bar
+                .card-prog-fill(data-el='progFill' style='width:0%')
+              .card-actions
+                a.btn-summary(data-el='summaryLink' href='#' target='_blank') შეჯამების წაკითხვა
+                button.btn-secondary.sr-only(type='button' data-el='moreBtn') დეტალები
+
+        //- Modal (hidden by default)
+        .modal-overlay#modal.hidden(role='dialog' aria-modal='true')
+          .modal-panel
+            button.modal-close#modalClose(aria-label='Close') ×
+            .modal-hero
+              img.modal-cover#modalCover(src='' alt='')
+              .modal-hero-overlay
+            .modal-body
+              span.modal-genre#modalGenre
+              h3.modal-title#modalTitle
+              p.modal-author#modalAuthor
+              p.modal-desc#modalDesc
+              .prog-tracker
+                .prog-tracker-label იმის სტატუსი
+                .prog-btns
+                  button.prog-btn(data-status='unread') არ წაკითხული
+                  button.prog-btn(data-status='reading') წაკითხვის პროცესში
+                  button.prog-btn(data-status='finished') დასრულებული
+              .modal-actions
+                a.btn-primary#modalSummary(href='#' target='_blank') შეჯამების წაკითხვა
+                a.btn-secondary#modalBook(href='#' target='_blank') წიგნი
+
+        footer.site-footer
+          p © <span id='year'></span> წიგნების შეჯამების პროექტი
+
+    script(src='assets/js/app.js' defer)

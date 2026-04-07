@@ -19,7 +19,7 @@ img {
 
 /* ── Fonts ── */
 :root {
-  --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'Fira Code', 'Courier New', monospace;
 }
@@ -31,44 +31,47 @@ img {
 /* Default (light warm) */
 :root,
 [data-theme="light"] {
-  --bg: #faf8f4;
-  --bg-hero: #1a1612;
-  --surface: #ffffff;
-  --surface-alt: #f0ece4;
-  --text-1: #1c1710;
-  --text-2: #5c5448;
-  --text-3: #9e9287;
-  --accent: #b5651d;
-  --accent-soft: rgba(181, 101, 29, 0.12);
-  --border: rgba(0, 0, 0, 0.08);
+  --bg: #f6efe7;
+  /* cream */
+  --bg-hero: #4b1120;
+  /* deep burgundy hero */
+  --surface: #fffaf5;
+  --surface-alt: #f1e9de;
+  --text-1: #1b1410;
+  --text-2: #6b5a50;
+  --text-3: #9a877a;
+  --accent: #b88733;
+  /* gold */
+  --accent-soft: rgba(184, 135, 51, 0.12);
+  --border: rgba(0, 0, 0, 0.06);
   --mark: #fff0b3;
-  --code-bg: #f0ece4;
-  --scrollbar: #c8bfb0;
+  --code-bg: #f1e9de;
+  --scrollbar: #d1c3a8;
   --hero-text: #fff;
-  --chip-bg: rgba(255, 255, 255, 0.15);
-  --chip-border: rgba(255, 255, 255, 0.25);
-  --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  --chip-bg: rgba(255, 255, 255, 0.12);
+  --chip-border: rgba(255, 255, 255, 0.18);
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
 }
 
 /* Dark (default for reader — cozy & immersive) */
 [data-theme="dark"] {
-  --bg: #141210;
-  --bg-hero: #0a0908;
-  --surface: #1c1915;
-  --surface-alt: #242019;
-  --text-1: #e8dfd2;
-  --text-2: #a89880;
-  --text-3: #6d6055;
-  --accent: #d4943a;
-  --accent-soft: rgba(212, 148, 58, 0.15);
-  --border: rgba(255, 255, 255, 0.07);
-  --mark: #4a3410;
-  --code-bg: #1e1b15;
-  --scrollbar: #3d3529;
+  --bg: #0f0c0b;
+  --bg-hero: #0a0706;
+  --surface: #191616;
+  --surface-alt: #231e1c;
+  --text-1: #efe6db;
+  --text-2: #b8a68f;
+  --text-3: #7b6b5f;
+  --accent: #b88733;
+  --accent-soft: rgba(184, 135, 51, 0.12);
+  --border: rgba(255, 255, 255, 0.06);
+  --mark: #6a4f26;
+  --code-bg: #1c1714;
+  --scrollbar: #362f2a;
   --hero-text: #fff;
-  --chip-bg: rgba(255, 255, 255, 0.1);
-  --chip-border: rgba(255, 255, 255, 0.18);
-  --shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
+  --chip-bg: rgba(255, 255, 255, 0.06);
+  --chip-border: rgba(255, 255, 255, 0.12);
+  --shadow: 0 8px 34px rgba(0, 0, 0, 0.5);
 }
 
 /* Night (deep blue) */

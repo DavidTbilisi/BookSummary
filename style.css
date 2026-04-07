@@ -1,5 +1,6 @@
-/* Bookish theme variables */
-:root {
+/* Legacy overrides — main.css is the primary stylesheet */
+/* Intentionally left minimal to avoid conflicts */
+:root_LEGACY_DISABLED {
     --clr-parchment: #f6f1e3;
     --clr-parchment-dark: #ece3ce;
     --clr-ink: #2f2a25;
@@ -11,57 +12,149 @@
     --clr-muted: #6f655c;
 }
 
-html { font-family: 'Merriweather', serif; }
-body { background-image: radial-gradient(circle at 25% 15%, rgba(255,255,255,0.9), rgba(255,255,255,0) 70%), url('https://www.transparenttextures.com/patterns/aged-paper.png'); background-attachment: fixed; }
+html {
+    font-family: 'Merriweather', serif;
+}
+
+body {
+    background-image: radial-gradient(circle at 25% 15%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0) 70%), url('https://www.transparenttextures.com/patterns/aged-paper.png');
+    background-attachment: fixed;
+}
 
 /* Utility buttons overriding Tailwind */
-.btn-primary, .btn-secondary {
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:0.375rem;
-    padding:0.375rem 0.75rem; /* px-3 py-1.5 */
-    font-size:0.75rem; /* text-xs */
-    font-weight:600;
-    letter-spacing:0.05em; /* tracking-wide */
-    line-height:1.1;
-    transition:background-color .25s, color .25s, box-shadow .25s;
-    position:relative;
+.btn-primary,
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    /* px-3 py-1.5 */
+    font-size: 0.75rem;
+    /* text-xs */
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    /* tracking-wide */
+    line-height: 1.1;
+    transition: background-color .25s, color .25s, box-shadow .25s;
+    position: relative;
 }
-.btn-primary { background:#d97706; color:#fff; box-shadow:0 1px 2px rgba(0,0,0,.08); }
-.btn-primary:hover { background:#b45309; }
-.btn-secondary { background:#fef3c7; color:#78350f; border:1px solid var(--clr-border); }
-.btn-secondary:hover { background:#fde68a; }
-.btn-primary:focus-visible, .btn-secondary:focus-visible { outline:2px solid #f59e0b; outline-offset:2px; }
+
+.btn-primary {
+    background: #d97706;
+    color: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .08);
+}
+
+.btn-primary:hover {
+    background: #b45309;
+}
+
+.btn-secondary {
+    background: #fef3c7;
+    color: #78350f;
+    border: 1px solid var(--clr-border);
+}
+
+.btn-secondary:hover {
+    background: #fde68a;
+}
+
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible {
+    outline: 2px solid #f59e0b;
+    outline-offset: 2px;
+}
 
 /* Nav link style */
 .nav-link {
-    padding:0.5rem 0.75rem; /* px-3 py-2 */
-    border-radius:0.375rem;
-    font-size:13px;
-    font-weight:500;
-    color:var(--clr-muted);
-    text-decoration:none;
-    transition:background-color .25s,color .25s;
+    padding: 0.5rem 0.75rem;
+    /* px-3 py-2 */
+    border-radius: 0.375rem;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--clr-muted);
+    text-decoration: none;
+    transition: background-color .25s, color .25s;
 }
-.nav-link:hover { color:var(--clr-ink); background:rgba(251,191,36,0.25); }
-.nav-link:focus-visible { outline:2px solid #f59e0b; outline-offset:2px; }
+
+.nav-link:hover {
+    color: var(--clr-ink);
+    background: rgba(251, 191, 36, 0.25);
+}
+
+.nav-link:focus-visible {
+    outline: 2px solid #f59e0b;
+    outline-offset: 2px;
+}
 
 /* Line clamp fallback */
-.line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-clamp:2; }
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-clamp: 2;
+}
 
 /* Scrollbar styling */
-#dialogBody::-webkit-scrollbar { width: 10px; }
-#dialogBody::-webkit-scrollbar-track { background: var(--clr-parchment-dark); }
-#dialogBody::-webkit-scrollbar-thumb { background: var(--clr-accent); border-radius: 6px; }
-#dialogBody::-webkit-scrollbar-thumb:hover { background: #8c5d10; }
+#dialogBody::-webkit-scrollbar {
+    width: 10px;
+}
+
+#dialogBody::-webkit-scrollbar-track {
+    background: var(--clr-parchment-dark);
+}
+
+#dialogBody::-webkit-scrollbar-thumb {
+    background: var(--clr-accent);
+    border-radius: 6px;
+}
+
+#dialogBody::-webkit-scrollbar-thumb:hover {
+    background: #8c5d10;
+}
 
 /* Simple enter animations */
-@keyframes fade-in { from { opacity:0; transform:translateY(4px);} to { opacity:1; transform:translateY(0);} }
-@keyframes zoom-in { from { scale:.96; opacity:0;} to { scale:1; opacity:1;} }
-.animate-in { animation-duration:.4s; animation-fill-mode:both; }
-.fade-in { animation-name:fade-in; }
-.zoom-in { animation-name:zoom-in; }
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes zoom-in {
+    from {
+        scale: .96;
+        opacity: 0;
+    }
+
+    to {
+        scale: 1;
+        opacity: 1;
+    }
+}
+
+.animate-in {
+    animation-duration: .4s;
+    animation-fill-mode: both;
+}
+
+.fade-in {
+    animation-name: fade-in;
+}
+
+.zoom-in {
+    animation-name: zoom-in;
+}
 
 /* Focus ring offset background harmonization */
-:focus-visible { outline:2px solid #f59e0b; outline-offset:2px; }
+:focus-visible {
+    outline: 2px solid #f59e0b;
+    outline-offset: 2px;
+}

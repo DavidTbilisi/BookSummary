@@ -1,168 +1,107 @@
 <!DOCTYPE html>
-<html lang="ka" class="h-full">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>KnowledgeBase</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/main.css" />
-  <!-- Prevent flash of wrong theme -->
-  <script>(function(){try{var t=localStorage.getItem('kb:theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
-</head>
-<body>
-
-  <div class="page-shell">
-    <div class="app-container">
-
-      <!-- ── Header ── -->
-      <header class="site-header">
-        <div class="header-pill">
-          <a href="/" class="logo">KnowledgeBase</a>
-          <nav class="main-nav" aria-label="Primary">
-            <a href="#books" class="nav-link">Books</a>
-            <a href="#stats" class="nav-link">Stats</a>
-            <a href="#about" class="nav-link">About</a>
-          </nav>
-          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-            <span class="theme-icon" aria-hidden="true">☀️</span>
-          </button>
-        </div>
-      </header>
-
-      <!-- ── Search ── -->
-      <section class="search-section" aria-label="Search books">
-        <div class="search-wrap">
-          <input id="search" type="search" class="search-input"
-                 placeholder="Search Books" autocomplete="off" spellcheck="false" />
-          <span class="search-icon" aria-hidden="true">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-            </svg>
-          </span>
-          <kbd class="search-kbd">Ctrl K</kbd>
-        </div>
-      </section>
-
-      <!-- ── Genre filter pills ── -->
-      <section class="genre-section" aria-label="Filter by genre">
-        <div class="genre-pills" id="genrePills" role="group" aria-label="Genre filters">
-          <button class="genre-pill genre-pill--all active" data-genre="all">ყველა</button>
-          <button class="genre-pill" data-genre="productivity" style="--pill-bg:#fed7aa;--pill-color:#9a3412;">Productivity</button>
-          <button class="genre-pill" data-genre="learning"    style="--pill-bg:#bbf7d0;--pill-color:#14532d;">Learning</button>
-          <button class="genre-pill" data-genre="thinking"    style="--pill-bg:#bfdbfe;--pill-color:#1e3a5f;">Thinking</button>
-          <button class="genre-pill" data-genre="finance"     style="--pill-bg:#99f6e4;--pill-color:#134e4a;">Finance</button>
-          <button class="genre-pill" data-genre="psychology"  style="--pill-bg:#fbcfe8;--pill-color:#831843;">Psychology</button>
-        </div>
-      </section>
-
-      <!-- ── Stats bar ── -->
-      <section class="stats-bar" id="stats" aria-label="Reading statistics">
-        <div class="stat-item">
-          <span class="stat-value" id="statTotal">—</span>
-          <span class="stat-label">სულ წიგნი</span>
-        </div>
-        <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item">
-          <span class="stat-value stat-value--reading" id="statReading">—</span>
-          <span class="stat-label">ვკითხულობ</span>
-        </div>
-        <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item">
-          <span class="stat-value stat-value--done" id="statFinished">—</span>
-          <span class="stat-label">წაკითხული</span>
-        </div>
-        <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item stat-item--progress">
-          <div class="stat-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="statBar">
-            <div class="stat-bar-fill" id="statBarFill"></div>
+<html lang="ka">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>წიგნების შეჯამების პროექტი</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="app-container">
+        <header class="site-header">
+          <div class="header-pill"><a class="logo" href="index.html">წიგნების შეჯამების პროექტი</a>
+            <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme"><span class="theme-icon">🌙</span></button>
           </div>
-          <span class="stat-label" id="statPct">0% დასრულებული</span>
-        </div>
-      </section>
-
-      <!-- ── Book grid ── -->
-      <main id="books" class="books-section">
-        <div class="books-grid" id="bookGrid"></div>
-        <p class="empty-msg hidden" id="emptyMsg">წიგნი ვერ მოიძებნა.</p>
-      </main>
-
-      <!-- ── Footer ── -->
-      <footer id="about" class="site-footer">
-        <p>&copy; <span id="year"></span> KnowledgeBase &mdash; წიგნების სიყვარული ზრდის აზროვნებას.</p>
-      </footer>
-
-    </div><!-- /app-container -->
-  </div><!-- /page-shell -->
-
-
-  <!-- ════════════════════════════════
-       Book card template
-  ════════════════════════════════ -->
-  <template id="book-card-tpl">
-    <article class="book-card" tabindex="0">
-      <div class="card-cover-wrap">
-        <img data-el="cover" alt="" class="card-cover" loading="lazy" />
-        <span class="card-status-dot" data-el="dot" aria-hidden="true"></span>
-        <span class="card-status-label sr-only" data-el="statusLabel"></span>
-      </div>
-      <div class="card-body">
-        <span class="card-genre-tag" data-el="genre"></span>
-        <h3 class="card-title" data-el="title"></h3>
-        <p  class="card-author"    data-el="author"></p>
-        <div class="card-prog-bar" aria-hidden="true">
-          <div class="card-prog-fill" data-el="progFill"></div>
-        </div>
-        <div class="card-actions">
-          <a class="btn-summary" data-el="summaryLink" target="_blank" rel="noopener">შეჯამება</a>
-          <button type="button" class="btn-more" data-el="moreBtn">Details</button>
-        </div>
-      </div>
-    </article>
-  </template>
-
-
-  <!-- ════════════════════════════════
-       Book detail / progress modal
-  ════════════════════════════════ -->
-  <div class="modal-overlay hidden" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-panel">
-      <button class="modal-close" id="modalClose" aria-label="Close">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-          <path d="M18 6 6 18M6 6l12 12"/>
-        </svg>
-      </button>
-
-      <div class="modal-hero">
-        <img id="modalCover" alt="" class="modal-cover" />
-        <div class="modal-hero-overlay"></div>
-      </div>
-
-      <div class="modal-body">
-        <span class="modal-genre" id="modalGenre"></span>
-        <h2 class="modal-title" id="modalTitle"></h2>
-        <p  class="modal-author" id="modalAuthor"></p>
-        <p  class="modal-desc"   id="modalDesc"></p>
-
-        <!-- Progress tracker -->
-        <div class="prog-tracker">
-          <p class="prog-tracker-label">Reading Progress</p>
-          <div class="prog-btns" role="group" aria-label="Set reading status">
-            <button class="prog-btn" data-status="unread"   id="pbUnread">📚 Not Started</button>
-            <button class="prog-btn" data-status="reading"  id="pbReading">📖 Reading</button>
-            <button class="prog-btn" data-status="finished" id="pbFinished">✅ Finished</button>
+        </header>
+        <div class="search-section">
+          <p class="search-tagline">მოკლე შეჯამებები გავლენიანი წიგნებიდან — მთავარი იდეები, პრაქტიკული დასკვნები</p>
+          <div class="search-wrap">
+            <input class="search-input" id="search" type="search" placeholder="ძებნა: სათაური ან ავტორი …">
+            <div class="search-icon">🔍</div><span class="search-kbd">Ctrl K</span>
           </div>
         </div>
-
-        <div class="modal-actions">
-          <a id="modalSummary" class="btn-primary"   target="_blank" rel="noopener">შეჯამება</a>
-          <a id="modalBook"    class="btn-secondary" target="_blank" rel="noopener">წიგნი ↗</a>
+        <div class="genre-section">
+          <div class="genre-pills">
+            <button class="genre-pill genre-pill--all active" data-genre="all">ყველა</button>
+            <button class="genre-pill" data-genre="productivity">პროდუქტიულობა</button>
+            <button class="genre-pill" data-genre="learning">სწავლა</button>
+            <button class="genre-pill" data-genre="thinking">აზროვნება</button>
+            <button class="genre-pill" data-genre="psychology">ფსიქოლოგია</button>
+            <button class="genre-pill" data-genre="finance">ფინანსები</button>
+            <button class="genre-pill" data-genre="general">ზოგადი</button>
+          </div>
         </div>
+        <div class="stats-bar">
+          <div class="stat-item">
+            <div class="stat-value" id="statTotal">0</div>
+            <div class="stat-label">წიგნების რაოდენობა</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-value stat-value--reading" id="statReading">0</div>
+            <div class="stat-label">წიგნი მიმდინარეობაში</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-value stat-value--done" id="statFinished">0</div>
+            <div class="stat-label">დასრულებული</div>
+          </div>
+          <div class="stat-item--progress">
+            <div class="stat-label" id="statPct">0% დასრულებული</div>
+            <div class="stat-bar" id="statBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div class="stat-bar-fill" id="statBarFill" style="width:0%"></div>
+            </div>
+          </div>
+        </div>
+        <section class="books-section">
+          <div class="books-grid" id="bookGrid"></div>
+          <div class="empty-msg hidden" id="emptyMsg">არაფერი წიგნები არ მოიძებნა</div>
+        </section>
+        <template id="book-card-tpl">
+          <article class="book-card" tabindex="0">
+            <div class="card-cover-wrap"><img class="card-cover" data-el="cover" src="" alt="">
+              <div class="card-status-dot" data-el="dot" data-status="unread" aria-hidden="true"></div>
+            </div>
+            <div class="card-body"><span class="card-genre-tag" data-el="genre"></span>
+              <h3 class="card-title" data-el="title"></h3>
+              <p class="card-author" data-el="author"></p>
+              <div class="card-prog-bar">
+                <div class="card-prog-fill" data-el="progFill" style="width:0%"></div>
+              </div>
+              <div class="card-actions"><a class="btn-summary" data-el="summaryLink" href="#" target="_blank">შეჯამების წაკითხვა</a>
+                <button class="btn-secondary sr-only" type="button" data-el="moreBtn">დეტალები</button>
+              </div>
+            </div>
+          </article>
+        </template>
+        <div class="modal-overlay hidden" id="modal" role="dialog" aria-modal="true">
+          <div class="modal-panel">
+            <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+            <div class="modal-hero"><img class="modal-cover" id="modalCover" src="" alt="">
+              <div class="modal-hero-overlay"></div>
+            </div>
+            <div class="modal-body"><span class="modal-genre" id="modalGenre"></span>
+              <h3 class="modal-title" id="modalTitle"></h3>
+              <p class="modal-author" id="modalAuthor"></p>
+              <p class="modal-desc" id="modalDesc"></p>
+              <div class="prog-tracker">
+                <div class="prog-tracker-label">იმის სტატუსი</div>
+                <div class="prog-btns">
+                  <button class="prog-btn" data-status="unread">არ წაკითხული</button>
+                  <button class="prog-btn" data-status="reading">წაკითხვის პროცესში</button>
+                  <button class="prog-btn" data-status="finished">დასრულებული</button>
+                </div>
+              </div>
+              <div class="modal-actions"><a class="btn-primary" id="modalSummary" href="#" target="_blank">შეჯამების წაკითხვა</a><a class="btn-secondary" id="modalBook" href="#" target="_blank">წიგნი</a></div>
+            </div>
+          </div>
+        </div>
+        <footer class="site-footer">
+          <p>© <span id='year'></span> წიგნების შეჯამების პროექტი</p>
+        </footer>
       </div>
     </div>
-  </div>
-
-  <script src="assets/js/app.js" type="module"></script>
-</body>
+    <script src="assets/js/app.js" defer></script>
+  </body>
 </html>

@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<div class="reader-page" data-words="294" data-read-min="1">
+<div class="reader-page" data-words="289" data-read-min="1">
 
   <!-- ── Hero ── -->
   <header class="book-hero" style="--cover-url:url('https://m.media-amazon.com/images/I/51SrO5oPAqL._SY522_.jpg')">
@@ -32,7 +32,7 @@
             <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
             ~1 min read
           </span>
-          <span class="chip chip--words">294 words</span>
+          <span class="chip chip--words">289 words</span>
           <a href="https://www.amazon.com/Art-Systems-Thinking-Essential-Creativity/dp/0722534426" target="_blank" rel="noopener" class="chip chip--buy">Buy book ↗</a>
         </div>
       </div>
@@ -75,15 +75,15 @@
 <h3>გროვა vs სისტემა</h3>
 <pre><code class="language-mermaid">flowchart LR
   subgraph Heap [გროვა]
-    H1[ნაჭარი]
-    H2[ნაჭარი]
-    H3[ნაჭარი]
+    H1[ნაწილი]
+    H2[ნაწილი]
+    H3[ნაწილი]
   end
 
   subgraph System [სისტემა]
     S1[ნაწილი] --&gt; S2[ნაწილი]
     S2 --&gt; S3[ნაწილი]
-    S3 --&gt; S1
+    S3 --&gt; S1[ნაწილი]
   end
 </code></pre>
 <ul>
@@ -169,7 +169,6 @@
   Events[მოვლენები] --&gt; Patterns[პატერნები]
   Patterns --&gt; Structure[სტრუქტურა]
 </code></pre>
-<p>იფიქრეთ სისტემურად — არა ეპიზოდურად.</p>
 
     </div>
   </article>

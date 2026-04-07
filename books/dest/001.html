@@ -1,16 +1,53 @@
 <!DOCTYPE html>
-<html lang="ka">
+<html lang="ka" data-theme="dark">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>შეჭამე ბაყაყი – თავი 1+</title>
-  <link rel="stylesheet" href="../../assets/css/reader.css" />
-  <script src="../../hearders.js" defer></script>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>შეჭამე ბაყაყი – კონსპექტი</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../../assets/css/reader.css"/>
+<script>(function(){try{var p=JSON.parse(localStorage.getItem('reader:prefs:v2')||'{}');if(p.theme)document.documentElement.setAttribute('data-theme',p.theme);if(p.fontSize)document.documentElement.style.setProperty('--font-size-base',p.fontSize+'rem');}catch(e){}})()</script>
 </head>
-<body class="reader-shell">
-  <main class="reader" id="content" tabindex="-1">
-   <h1 class="sr-only">შეჭამე ბაყაყი (მოკლე კონსპექტი)</h1>
-   <h2 id="-1-">თავი 1. გააწყვეთ სუფრა</h2>
+<body>
+
+<div class="reader-page" data-words="828" data-read-min="4">
+
+  <!-- Hero -->
+  <header class="book-hero" style="--cover-url:url('https://www.burnthefatinnercircle.com/members/images/2252.jpg?cb=20231212125423')">
+    <div class="hero-backdrop"></div>
+    <div class="hero-inner">
+      <a href="../../index.html" class="hero-back" aria-label="Back to library">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Library
+      </a>
+      <img src="https://www.burnthefatinnercircle.com/members/images/2252.jpg?cb=20231212125423" alt="შეჭამე ბაყაყი cover" class="hero-cover" loading="eager"/>
+      <div class="hero-meta">
+        <p class="hero-kicker">Book Summary</p>
+        <h1 class="hero-title">შეჭამე ბაყაყი</h1>
+        <p class='hero-author'>ბრაიან თრეისი</p>
+        <div class="hero-chips">
+          <span class="chip chip--time">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            ~4 min read
+          </span>
+          <span class="chip chip--words">828 words</span>
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Progress bar -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true">
+    <div class="scroll-progress-fill" id="scrollFill"></div>
+  </div>
+
+  <!-- Article -->
+  <article class="reader-wrap">
+    <div class="reader-content" id="readerContent">
+<h2 id="-1-">თავი 1. გააწყვეთ სუფრა</h2>
    <p>წარმატების მისაღწევად ფურცელზე გადაიტანეთ თქვენი ნააზრევი. არსებობს მიზნის დასახვისა და მიღწევის 7 საფეხურიანი ფორმულა: </p>
    <ol>
    <li>გაცნობიერეთ მიზანი.</li>
@@ -95,7 +132,23 @@
    <p>რაც უფრო მეტად მიაჩვევთ საკუთარ თავს, შეუსვენებლად იმუშაოთ ერთ რომელიმე ამოცანაზე, მით უფრო წინ წაიწევთ „ეფექტურობის მრუდზე“ - თქვენ უფრო ნაკლებ დროში მეტი სამუშაოს შესრულებას შეძლებთ. </p>
    <p>თვითდისციპლინა, თავდაჭერილობა და საკუთარი თავის კონტროლი ის აუცილებელი თვისებებია, რომლებიც საჭიროა სამუშაოს საუკეთესოდ შესასრულებლად. </p>
    <p>ამ ყველაფრის გასაღები კი არის თქვენი უნარი, ნებისმიერ დროს აირჩიოთ ყველაზე მნიშვნელოვანი ამოცანა და შეჭამოთ ბაყაყი!</p>
-  </main>
-  <script src="../../assets/js/reader.js" defer></script>
+    </div>
+  </article>
+
+  <!-- Control bar -->
+  <div class="ctrl-bar" id="ctrlBar" aria-label="Reading controls">
+    <button class="ctrl-btn" data-act="back"    title="Back to library">←</button>
+    <button class="ctrl-btn" data-act="smaller" title="Smaller text (-)">A−</button>
+    <button class="ctrl-btn" data-act="larger"  title="Larger text (+)">A+</button>
+    <button class="ctrl-btn ctrl-btn--theme" data-act="theme" id="themeBtn" title="Cycle theme">◑</button>
+    <button class="ctrl-btn" data-act="top"     title="Back to top">↑</button>
+    <button class="ctrl-btn" data-act="print"   title="Print">⎙</button>
+  </div>
+
+  <div class="read-pct" id="readPct" aria-hidden="true">0%</div>
+
+</div>
+
+<script src="../../assets/js/reader.js" defer></script>
 </body>
 </html>

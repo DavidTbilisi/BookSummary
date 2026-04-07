@@ -24,8 +24,87 @@ const manualMeta = {
 
 async function ensureDir(p){ await fs.mkdir(p, { recursive: true }); }
 
-function wrapHtml(id, title, body){
-  return `<!DOCTYPE html>\n<html lang="ka">\n<head>\n<meta charset='utf-8'/>\n<meta name='viewport' content='width=device-width,initial-scale=1'/>\n<title>${title} – კონსპექტი</title>\n<link rel='stylesheet' href='../../assets/css/reader.css'/>\n</head>\n<body class='reader-shell'>\n<main class='reader' id='content' tabindex='-1'>\n<h1 class='sr-only'>${title} (კონსპექტი)</h1>\n${body}\n</main>\n<script src='../../assets/js/reader.js' defer></script>\n</body>\n</html>`;
+function countWords(markdown){
+  return markdown.replace(/```[\s\S]*?```/g,'').replace(/[#*_`\[\]()>]/g,'').trim().split(/\s+/).filter(Boolean).length;
+}
+
+function wrapHtml(id, meta, body, wordCount){
+  const readMin = Math.max(1, Math.round(wordCount / 200));
+  const title   = meta.title  || id;
+  const author  = meta.author || '';
+  const cover   = meta.cover  || '';
+  const bookUrl = meta.book   || '#';
+  return `<!DOCTYPE html>
+<html lang="ka" data-theme="dark">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>${title} – კონსპექტი</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../../assets/css/reader.css"/>
+<script>(function(){try{var p=JSON.parse(localStorage.getItem('reader:prefs:v2')||'{}');if(p.theme)document.documentElement.setAttribute('data-theme',p.theme);if(p.fontSize)document.documentElement.style.setProperty('--font-size-base',p.fontSize+'rem');}catch(e){}})();</script>
+</head>
+<body>
+
+<div class="reader-page" data-words="${wordCount}" data-read-min="${readMin}">
+
+  <!-- ── Hero ── -->
+  <header class="book-hero" style="--cover-url:url('${cover}')">
+    <div class="hero-backdrop"></div>
+    <div class="hero-inner">
+      <a href="../../index.html" class="hero-back" aria-label="Back to library">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Library
+      </a>
+      ${cover ? `<img src="${cover}" alt="${title} cover" class="hero-cover" loading="eager"/>` : ''}
+      <div class="hero-meta">
+        <p class="hero-kicker">Book Summary</p>
+        <h1 class="hero-title">${title}</h1>
+        ${author ? `<p class="hero-author">${author}</p>` : ''}
+        <div class="hero-chips">
+          <span class="chip chip--time">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            ~${readMin} min read
+          </span>
+          <span class="chip chip--words">${wordCount.toLocaleString()} words</span>
+          ${bookUrl !== '#' ? `<a href="${bookUrl}" target="_blank" rel="noopener" class="chip chip--buy">Buy book ↗</a>` : ''}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Progress bar ── -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true">
+    <div class="scroll-progress-fill" id="scrollFill"></div>
+  </div>
+
+  <!-- ── Article content ── -->
+  <article class="reader-wrap">
+    <div class="reader-content" id="readerContent">
+${body}
+    </div>
+  </article>
+
+  <!-- ── Bottom control bar ── -->
+  <div class="ctrl-bar" id="ctrlBar" aria-label="Reading controls">
+    <button class="ctrl-btn" data-act="back"    title="Back to library">←</button>
+    <button class="ctrl-btn" data-act="smaller" title="Smaller text (-)">A−</button>
+    <button class="ctrl-btn" data-act="larger"  title="Larger text (+)">A+</button>
+    <button class="ctrl-btn ctrl-btn--theme" data-act="theme" id="themeBtn" title="Cycle theme">◑</button>
+    <button class="ctrl-btn" data-act="top"     title="Back to top">↑</button>
+    <button class="ctrl-btn" data-act="print"   title="Print">⎙</button>
+  </div>
+
+  <!-- ── Reading progress label ── -->
+  <div class="read-pct" id="readPct" aria-hidden="true">0%</div>
+
+</div>
+
+<script src="../../assets/js/reader.js" defer></script>
+</body>
+</html>`;
 }
 
 async function build(){
@@ -38,7 +117,8 @@ async function build(){
     const raw = await fs.readFile(path.join(srcDir, file), 'utf8');
     const html = marked.parse(raw);
     const meta = manualMeta[id] || { title: id, author: '', cover: '', book: '#' };
-    const outHtml = wrapHtml(id, meta.title, html);
+    const wordCount = countWords(raw);
+    const outHtml = wrapHtml(id, meta, html, wordCount);
     const outFile = path.join(destDir, `${id}.html`);
     await fs.writeFile(outFile, outHtml, 'utf8');
     books.push({ id, title: meta.title, author: meta.author, cover: meta.cover, summary: `books/dest/${id}.html`, book: meta.book, desc: meta.desc || '' });

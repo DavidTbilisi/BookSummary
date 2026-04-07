@@ -67,15 +67,15 @@
     "summary": "books/dest/007.html",
     "book": "https://www.amazon.com/Art-Systems-Thinking-Essential-Creativity/dp/0722534426",
     "desc": "სისტემა არის ერთიანობა, რომელიც ინარჩუნებს თავის არსებობას და ფუნქციონირებს როგორც მთლიანობა მისი ნაწილების ურთიერთქმედების შედეგად.",
-    "genre": "Thinking"
+    "genre": "thinking"
   },
   {
     "id": "008",
     "title": "მსჯელობის პატარა ლურჯი წიგნი",
     "author": "ბრენდონ როიალი",
-    "cover": "https://via.placeholder.com/350x500.png?text=მსჯელობის+პატარა+ლურჯი+წიგნი",
+    "cover": "https://m.media-amazon.com/images/I/71jtC9EROPL._SY425_.jpg",
     "summary": "books/dest/008.html",
-    "book": "#",
+    "book": "https://www.amazon.com/Little-Blue-Thinking-Book-Principles/dp/1435145682",
     "desc": "50 მძლავრი პრინციპი მკაფიო და ეფექტური აზროვნებისთვის",
     "genre": "thinking"
   },
@@ -83,9 +83,9 @@
     "id": "009",
     "title": "როგორ მოვაგვაროთ იგი",
     "author": "გ.პოლია",
-    "cover": "https://via.placeholder.com/350x500.png?text=როგორ+მოვაგვაროთ+იგი",
+    "cover": "https://m.media-amazon.com/images/I/71wsHB2XIOL._SY466_.jpg",
     "summary": "books/dest/009.html",
-    "book": "#",
+    "book": "https://www.amazon.com/How-Solve-Mathematical-Princeton-Science/dp/069116407X/ref=pd_sbs_d_sccl_1_1/134-2482100-4737322?psc=1",
     "desc": "პრობლემების გადაჭრის მეთოდები და პრაქტიკული რჩევები",
     "genre": "learning"
   },
@@ -93,9 +93,9 @@
     "id": "010",
     "title": "ღრმა სამუშაო",
     "author": "კალ ნიუპორტი",
-    "cover": "https://via.placeholder.com/350x500.png?text=ღრმა+სამუშაო",
+    "cover": "https://m.media-amazon.com/images/I/61zt25yYrCL._SY466_.jpg",
     "summary": "books/dest/010.html",
-    "book": "#",
+    "book": "https://www.amazon.com/Deep-Work-Focused-Success-Distracted/dp/0349413681/ref=sr_1_1?s=books&sr=1-1",
     "desc": "ღრმა მუშაობის მნიშვნელობა და პრაქტიკული წესები კონცენტრირებული მუშაობისთვის",
     "genre": "productivity"
   }

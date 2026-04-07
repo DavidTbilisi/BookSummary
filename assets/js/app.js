@@ -3,17 +3,15 @@
 //  Catalog + progress tracking
 // ══════════════════════════════════════════
 
-// ── Genre metadata ──────────────────────
-const GENRES = {
-  '001': { key: 'productivity', label: 'Productivity', bg: '#fed7aa', color: '#9a3412' },
-  '002': { key: 'productivity', label: 'Productivity', bg: '#fed7aa', color: '#9a3412' },
-  '003': { key: 'learning',    label: 'Learning',     bg: '#bbf7d0', color: '#14532d' },
-  '004': { key: 'thinking',    label: 'Thinking',     bg: '#bfdbfe', color: '#1e3a5f' },
-  '005': { key: 'thinking',    label: 'Thinking',     bg: '#bfdbfe', color: '#1e3a5f' },
-  '006': { key: 'finance',     label: 'Finance',      bg: '#99f6e4', color: '#134e4a' },
+// ── Genre palette (keyed by genre name, matches front matter) ───
+const GENRE_PALETTE = {
+  productivity: { label: 'Productivity', bg: '#fed7aa', color: '#9a3412' },
+  learning:     { label: 'Learning',     bg: '#bbf7d0', color: '#14532d' },
+  thinking:     { label: 'Thinking',     bg: '#bfdbfe', color: '#1e3a5f' },
+  finance:      { label: 'Finance',      bg: '#99f6e4', color: '#134e4a' },
+  psychology:   { label: 'Psychology',   bg: '#fbcfe8', color: '#831843' },
+  general:      { label: 'General',      bg: '#e5e7eb', color: '#374151' },
 };
-
-const GENRE_DEFAULT = { key: 'general', label: 'General', bg: '#e5e7eb', color: '#374151' };
 
 // ── Progress (localStorage) ──────────────
 function getStatus(id) {
@@ -60,7 +58,7 @@ function renderGrid(query = '') {
 
   let books = activeGenre === 'all'
     ? allBooks
-    : allBooks.filter(b => (GENRES[b.id] ?? GENRE_DEFAULT).key === activeGenre);
+    : allBooks.filter(b => (b.genre || 'general') === activeGenre);
 
   if (query) {
     const q = query.toLowerCase();
@@ -75,7 +73,7 @@ function renderGrid(query = '') {
     const card = template.content.firstElementChild.cloneNode(true);
     card.dataset.id = b.id;
 
-    const genre  = GENRES[b.id] ?? GENRE_DEFAULT;
+    const genre  = GENRE_PALETTE[b.genre] ?? GENRE_PALETTE.general;
     const status = getStatus(b.id);
 
     // Cover
@@ -166,7 +164,7 @@ function setText(id, val) {
 // ════════════════════════════════════════
 function openModal(b) {
   currentBook = b;
-  const genre  = GENRES[b.id] ?? GENRE_DEFAULT;
+  const genre  = GENRE_PALETTE[b.genre] ?? GENRE_PALETTE.general;
   const status = getStatus(b.id);
 
   document.getElementById('modalCover').src  = b.cover || '';

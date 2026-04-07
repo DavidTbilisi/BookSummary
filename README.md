@@ -1,64 +1,131 @@
 # BookSummary
 
-Static book summary catalog + reader experience.
+A community-maintained library of book summaries — readable in the browser with a clean reader experience, dark mode, and reading progress tracking.
 
-## Structure
+[![Build Books](https://github.com/DavidTbilisi/BookSummary/actions/workflows/build.yml/badge.svg)](https://github.com/DavidTbilisi/BookSummary/actions/workflows/build.yml)
 
-- `index.html` main catalog (cards rendered from `data/books.json`).
-- `assets/css/main.css` catalog styles & theme variables.
-- `assets/css/reader.css` reader page styles (themes, controls, typography).
-- `assets/js/app.js` catalog logic (fetch metadata, build cards, modal, search, shortcuts).
-- `assets/js/reader.js` reading enhancements (progress bar, theme/layout/font size toggles, persistence).
-- `books/src/*.md` markdown sources (author adds summaries here).
-- `books/dest/*.html` generated reader pages (do not edit by hand).
-- `data/books.json` generated metadata (id, title, author, cover, links, desc).
-- `scripts/build.js` build script (markdown → HTML + regenerate `books.json`).
-- `package.json` dependencies & build script (Node + marked).
+---
 
-## Adding a Book
-1. Create a markdown file in `books/src` (e.g. `007.md`).
-2. Add or update the `manualMeta` entry for that id in `scripts/build.js` (title, author, cover URL, optional book link, desc).
-3. Run the build script (see below). New HTML + updated JSON will be produced.
-4. Serve the folder over HTTP and open `index.html` (fetch requires a server, not a raw file URL).
+## Suggest a Book
 
-## Build
+Don't have time to write a summary but have a great book to recommend?
+**[Open a GitHub Issue](https://github.com/DavidTbilisi/BookSummary/issues/new)** with the book title and author — we'll take it from there.
+
+---
+
+## Contribute a Summary
+
+Contributing is simple — you only need to add **one file**.
+
+### Step 1 — Fork & clone
+
+```bash
+git clone https://github.com/YOUR_USERNAME/BookSummary.git
+cd BookSummary
+```
+
+### Step 2 — Copy the template
+
+```bash
+cp books/src/TEMPLATE.md books/src/007.md   # use the next available number
+```
+
+### Step 3 — Fill in the front matter
+
+Open your new file and fill in the fields at the top:
+
+```yaml
+---
+title: Atomic Habits
+author: James Clear
+genre: productivity
+cover: https://m.media-amazon.com/images/I/91bYsX41DVL.jpg
+book: https://www.amazon.com/Atomic-Habits-James-Clear/dp/0735211299
+desc: A practical guide to building good habits and breaking bad ones through tiny, consistent changes.
+---
+```
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `title` | yes | Full book title |
+| `author` | yes | Author name(s) |
+| `genre` | yes | See genre list below |
+| `cover` | yes | Book cover image URL (`https://...`) |
+| `book` | yes | Purchase/Amazon link, or `'#'` if unavailable |
+| `desc` | yes | 1–2 sentence description shown in the catalog card |
+
+### Step 4 — Write the summary
+
+Below the closing `---`, write your summary in plain Markdown. Use `##` for chapter or section headings:
+
+```markdown
+## Chapter 1 — The Surprising Power of Atomic Habits
+
+Small habits compound over time. A 1% improvement every day leads to 37x better outcomes in a year...
+
+## Chapter 2 — How Habits Actually Work
+
+The habit loop: Cue → Craving → Response → Reward...
+```
+
+### Step 5 — Open a Pull Request
+
+Push your branch and open a PR. The CI pipeline will automatically build your summary into an HTML reader page and update the catalog — **no other files need to be changed**.
+
+---
+
+## Valid Genres
+
+| Genre | Use for |
+|-------|---------|
+| `productivity` | Time management, GTD, goal setting |
+| `learning` | Skill acquisition, memory, education |
+| `thinking` | Mental models, decision making, reasoning |
+| `finance` | Investing, money, personal finance |
+| `psychology` | Behaviour, persuasion, mindset |
+| `general` | Everything else |
+
+---
+
+## Running Locally
+
 Prereq: Node >= 18.
 
 ```bash
 npm install
-npm run build
+npm run build       # convert .md → .html + regenerate data/books.json
+npx serve .         # serve at http://localhost:3000
 ```
 
-Outputs updated `books/dest/*.html` and `data/books.json`.
+> `fetch()` requires a real HTTP server — opening `index.html` directly as a `file://` URL won't work.
 
-## Local Dev / Preview
-Use any static server:
+---
 
-```bash
-npx serve .
-# or
-python -m http.server 8000
+## Project Structure
+
+```
+books/src/*.md        Markdown summaries (source of truth — edit these)
+books/dest/*.html     Generated reader pages (do not edit — auto-built)
+data/books.json       Generated catalog metadata (do not edit — auto-built)
+scripts/build.js      Build pipeline
+assets/js/app.js      Catalog logic (grid, modal, search, theme)
+assets/js/reader.js   Reader controls (progress, themes, font size)
+assets/css/           Catalog + reader stylesheets
 ```
 
-Visit http://localhost:8000/
+---
 
-## Features
-- Accessible description modal (focus trap, ESC close, Ctrl+K search focus).
-- Responsive grid (Tailwind CDN + custom “bookish” theme variables).
-- Reader page: themes (sepia / dark / night), multi‑column toggle, font size controls, scroll progress, persisted preferences.
-- Automated build from markdown sources keeps catalog in sync.
+## How CI Works
 
-## Roadmap Ideas
-- Front matter in markdown (remove manualMeta map).
-- Automatic description extraction (first paragraph) if `desc` absent.
-- Search index (lunr / minisearch) for title + full text.
-- Service worker for offline caching of pages & assets.
-- Theming toggle for catalog (light/dark/sepia parity with reader).
+Whenever a new `books/src/*.md` file is pushed to `master`, GitHub Actions automatically:
+1. Installs dependencies
+2. Runs `npm run build`
+3. Commits the generated `books/dest/*.html` and `data/books.json` back to the repo
 
-## Conventions
-- IDs numeric, zero‑padded only if desired for ordering (string compare with numeric option used).
-- Keep covers as external URLs for now; future: store locally under `assets/covers/`.
-- Do not manually edit generated HTML in `books/dest`—source of truth is markdown + build script template.
+The commit message contains `[skip ci]` so it doesn't trigger a second build.
+
+---
 
 ## License
-Personal project (add explicit license if distributing).
+
+Personal / community project. Add an explicit license before distributing.

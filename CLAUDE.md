@@ -21,26 +21,63 @@ books/src/*.md  →  scripts/build.js  →  books/dest/*.html
                                      →  data/books.json
 ```
 
-- `scripts/build.js` is the **only** file to edit when adding a new book. It contains `manualMeta`, a hardcoded object mapping book IDs to metadata (title, author, cover URL, description, external book link).
+- Each `books/src/*.md` file contains **YAML front matter** at the top — this is the sole source of truth for all book metadata.
+- `scripts/build.js` reads the front matter, converts the markdown body to HTML, and regenerates `data/books.json`.
 - `books/dest/*.html` and `data/books.json` are **auto-generated** — never edit them manually. Run `npm run build` to regenerate.
+- Only files with a purely numeric filename (e.g. `007.md`) are processed. `TEMPLATE.md` and other non-numeric files are skipped.
 
 ### Adding a New Book
 
-1. Create `books/src/{id}.md` with the summary content in Markdown.
-2. Add an entry to `manualMeta` in `scripts/build.js` with `title`, `author`, `cover`, `book`, and `desc`.
-3. Run `npm run build`.
+**Only one file needs to be created.** No other files require editing.
+
+1. Copy `books/src/TEMPLATE.md` → `books/src/{id}.md` (e.g. `007.md`).
+2. Fill in the YAML front matter fields: `title`, `author`, `genre`, `cover`, `book`, `desc`.
+3. Write the summary below the closing `---` using standard Markdown (`##` for chapters).
+4. Run `npm run build`.
+
+#### Front matter schema
+
+```yaml
+---
+title: Book Title
+author: Author Name
+genre: productivity   # productivity | learning | thinking | finance | psychology | general
+cover: https://...    # book cover image URL (must start with https://)
+book: '#'             # Amazon/purchase link, or '#' if unavailable
+desc: One or two sentences shown in the catalog card.
+---
+```
+
+#### Genres
+
+| Key | Label |
+|-----|-------|
+| `productivity` | Productivity |
+| `learning` | Learning |
+| `thinking` | Thinking |
+| `finance` | Finance |
+| `psychology` | Psychology |
+| `general` | General (default) |
+
+To add a **new genre**, add it to the `GENRE_PALETTE` object in both `scripts/build.js` and `assets/js/app.js`, and add a filter pill in `index.html`.
+
+### CI/CD
+
+Pushing any change to `books/src/` on `master` triggers `.github/workflows/build.yml`, which runs `npm run build` and commits the generated files back automatically. The commit message includes `[skip ci]` to prevent a loop.
 
 ### Key Files
 
 | File | Purpose |
 |------|---------|
-| `scripts/build.js` | Build script; metadata source of truth (`manualMeta`) |
+| `scripts/build.js` | Build script; `parseFrontMatter()` reads metadata from each `.md`; `GENRE_PALETTE` defines valid genres |
+| `books/src/TEMPLATE.md` | Contributor template — copy this to create a new book |
 | `index.html` | Catalog page; uses Tailwind CDN + `assets/css/main.css` |
-| `assets/js/app.js` | Catalog logic: grid render, modal, search, theme persistence |
+| `assets/js/app.js` | Catalog logic: grid render, modal, search, theme persistence; `GENRE_PALETTE` maps genre keys to display colours |
 | `assets/js/reader.js` | Reader controls: progress bar, theme/font/layout toggles, keyboard shortcuts |
 | `assets/css/main.css` | Catalog themes via `--clr-*` CSS variables |
 | `assets/css/reader.css` | Reader typography and themes (Default/Sepia/Dark/Night/B&W/High Contrast) |
 | `data/books.json` | Generated metadata array consumed by `app.js` on page load |
+| `.github/workflows/build.yml` | CI/CD: auto-build on push |
 
 ### Theming
 

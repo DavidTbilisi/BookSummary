@@ -12,15 +12,55 @@ const srcDir = path.join(root, 'books', 'src');
 const destDir = path.join(root, 'books', 'dest');
 const dataFile = path.join(root, 'data', 'books.json');
 
-// Simple metadata map (extend or load front matter later)
-const manualMeta = {
-  '001': { title: 'შეჭამე ბაყაყი', author: 'ბრაიან თრეისი', cover: 'https://www.burnthefatinnercircle.com/members/images/2252.jpg?cb=20231212125423', book: '#' },
-  '002': { title: 'Getting Things Done (GTD)', author: 'დევიდ ალენი', cover: 'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQZ_blTukS5FcvIprKh9MkI-XaLGdkGyTZUj-jAG7v-xS9qE-iK', book: '#' },
-  '003': { title: 'Ultralearning', author: 'Scott H. Young', cover: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1554211384i/44770129.jpg', book: '#' },
-  '004': { title: 'Think again', author: 'Adam Grant', cover: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTszXFLGlk6g0XhteqInJ2yWfwDsYiZcFrbBDXLw11qg7hF-SDV', book: 'https://www.amazon.com/Think-Again-Power-Knowing-What/dp/1984878107' },
-  '005': { title: 'The 5 Elements of Effective Thinking', author: 'Edward B. Burger, Michael Starbird', cover: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp6Agfgjk0LvZyl6ejbNjAfjjTT6yYtz9oZS1T5r6XCGSnNpyovjUxAtGSLSbOMfi8PFo&usqp=CAU', book: 'https://www.amazon.com/5-Elements-Effective-Thinking/dp/0691156662' },
-  '006': { title: 'ფულის ფსიქოლოგია', author: 'მორგან ჰაუსელი', cover: 'https://m.media-amazon.com/images/I/71aG0m9XRcL._AC_UF1000,1000_QL80_.jpg', book: 'https://www.amazon.com/Psychology-Money-Timeless-lessons-happiness/dp/0857197681' }
+// Valid genres — add new genres here to make them available in front matter
+const GENRE_PALETTE = {
+  productivity: { label: 'Productivity', bg: '#fed7aa', color: '#9a3412' },
+  learning:     { label: 'Learning',     bg: '#bbf7d0', color: '#14532d' },
+  thinking:     { label: 'Thinking',     bg: '#bfdbfe', color: '#1e3a5f' },
+  finance:      { label: 'Finance',      bg: '#99f6e4', color: '#134e4a' },
+  psychology:   { label: 'Psychology',   bg: '#fbcfe8', color: '#831843' },
+  general:      { label: 'General',      bg: '#e5e7eb', color: '#374151' },
 };
+
+// Parse YAML front matter from a markdown file.
+// Returns { meta, body } where body is the content after the closing ---.
+function parseFrontMatter(raw) {
+  // Strip UTF-8 BOM and normalise line endings so the parser works on both Windows and Unix
+  const src = raw.replace(/^\ufeff/, '').replace(/\r\n/g, '\n');
+  if (!src.startsWith('---\n')) return { meta: {}, body: raw };
+  const end = src.indexOf('\n---\n', 4);
+  if (end === -1) return { meta: {}, body: raw };
+  const block = src.slice(4, end);
+  const body  = src.slice(end + 5);
+  const meta  = {};
+  for (const line of block.split('\n')) {
+    const sep = line.indexOf(':');
+    if (sep === -1) continue;
+    const key = line.slice(0, sep).trim();
+    let   val = line.slice(sep + 1).trim();
+    // Strip inline comments (# ...) only for non-URL values
+    if (!val.startsWith('http')) val = val.replace(/\s+#.*$/, '');
+    // Strip surrounding quotes
+    val = val.replace(/^['"]|['"]$/g, '');
+    if (key) meta[key] = val;
+  }
+  return { meta, body };
+}
+
+// Warn about missing or invalid fields — build continues regardless.
+function validateMeta(id, meta) {
+  const required = ['title', 'author', 'genre', 'cover', 'book', 'desc'];
+  for (const field of required) {
+    if (!meta[field]) console.warn(`[WARN] ${id}.md: missing field "${field}"`);
+  }
+  if (meta.genre && !GENRE_PALETTE[meta.genre]) {
+    const valid = Object.keys(GENRE_PALETTE).join(', ');
+    console.warn(`[WARN] ${id}.md: unknown genre "${meta.genre}" (valid: ${valid})`);
+  }
+  if (meta.cover && !meta.cover.startsWith('https://')) {
+    console.warn(`[WARN] ${id}.md: cover URL should start with https://`);
+  }
+}
 
 async function ensureDir(p){ await fs.mkdir(p, { recursive: true }); }
 
@@ -111,17 +151,30 @@ async function build(){
   await ensureDir(destDir);
   const entries = await fs.readdir(srcDir);
   const books = [];
+  let warnings = 0;
   for(const file of entries){
     if(!file.endsWith('.md')) continue;
-    const id = file.split('.')[0];
+    // Only process numeric IDs (e.g. 001.md, 007.md) — skip TEMPLATE.md and other non-book files
+    const id = file.replace(/\.md$/, '');
+    if(!/^\d+$/.test(id)) continue;
     const raw = await fs.readFile(path.join(srcDir, file), 'utf8');
-    const html = marked.parse(raw);
-    const meta = manualMeta[id] || { title: id, author: '', cover: '', book: '#' };
-    const wordCount = countWords(raw);
+    const { meta, body } = parseFrontMatter(raw);
+    validateMeta(id, meta);
+    const html = marked.parse(body);
+    const wordCount = countWords(body);
     const outHtml = wrapHtml(id, meta, html, wordCount);
     const outFile = path.join(destDir, `${id}.html`);
     await fs.writeFile(outFile, outHtml, 'utf8');
-    books.push({ id, title: meta.title, author: meta.author, cover: meta.cover, summary: `books/dest/${id}.html`, book: meta.book, desc: meta.desc || '' });
+    books.push({
+      id,
+      title:   meta.title   || id,
+      author:  meta.author  || '',
+      cover:   meta.cover   || '',
+      summary: `books/dest/${id}.html`,
+      book:    meta.book    || '#',
+      desc:    meta.desc    || '',
+      genre:   meta.genre   || 'general',
+    });
   }
   // Preserve ordering by id numeric
   books.sort((a,b)=> a.id.localeCompare(b.id, undefined, { numeric:true }));

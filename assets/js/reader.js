@@ -196,4 +196,170 @@
   }
   initMermaid();
 
+  // ── Audio player initialization ─────────────────
+  function formatTime(sec) {
+    if (!isFinite(sec) || isNaN(sec)) return '0:00';
+    const s = Math.floor(sec || 0);
+    const m = Math.floor(s / 60);
+    const ss = s % 60;
+    return `${m}:${ss.toString().padStart(2, '0')}`;
+  }
+
+  function initAudioPlayers() {
+    try {
+      const players = Array.from(document.querySelectorAll('.audio-player'));
+      // Expose players for resize handler
+      window.__kbAudioPlayers = players;
+
+      // Reusable audio context + caches
+      const audioCtx = window.__kbAudioCtx || (window.__kbAudioCtx = new (window.AudioContext || window.webkitAudioContext)());
+      window.__kbWaveCache = window.__kbWaveCache || {};
+      window.__kbWaveDecodePromises = window.__kbWaveDecodePromises || {};
+
+      function ensureDecodedAudio(src) {
+        if (!src) return Promise.reject(new Error('no-src'));
+        if (window.__kbWaveCache[src]) return Promise.resolve(window.__kbWaveCache[src]);
+        if (window.__kbWaveDecodePromises[src]) return window.__kbWaveDecodePromises[src];
+        const p = fetch(src).then(r => r.arrayBuffer()).then(ab => audioCtx.decodeAudioData(ab)).then(buf => { window.__kbWaveCache[src] = buf; delete window.__kbWaveDecodePromises[src]; return buf; }).catch(err => { delete window.__kbWaveDecodePromises[src]; throw err; });
+        window.__kbWaveDecodePromises[src] = p;
+        return p;
+      }
+
+      function drawWaveFromBuffer(canvas, audioBuffer) {
+        if (!canvas || !audioBuffer) return;
+        const cs = getComputedStyle(document.documentElement);
+        const accent = cs.getPropertyValue('--accent') || '#d4943a';
+        const dpr = window.devicePixelRatio || 1;
+        const w = Math.max(120, Math.floor(canvas.clientWidth));
+        const h = Math.max(18, Math.floor(canvas.clientHeight));
+        canvas.width = Math.floor(w * dpr);
+        canvas.height = Math.floor(h * dpr);
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, w, h);
+        ctx.save();
+        ctx.scale(dpr, dpr);
+        const data = audioBuffer.getChannelData(0);
+        const step = Math.max(1, Math.floor(data.length / w));
+        const amp = h / 2;
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = accent.trim();
+        ctx.globalAlpha = 0.9;
+        ctx.beginPath();
+        for (let i = 0; i < w; i++) {
+          const start = i * step;
+          let max = 0;
+          for (let j = start; j < start + step && j < data.length; j++) {
+            const v = Math.abs(data[j]);
+            if (v > max) max = v;
+          }
+          const y1 = amp - max * amp;
+          const y2 = amp + max * amp;
+          ctx.moveTo(i + 0.5, y1);
+          ctx.lineTo(i + 0.5, y2);
+        }
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function renderWaveform(canvas, src) {
+        if (!canvas || !src) return;
+        ensureDecodedAudio(src).then(buf => {
+          drawWaveFromBuffer(canvas, buf);
+        }).catch(() => { /* ignore waveform failures */ });
+      }
+
+      players.forEach(wrapper => {
+        const audioEl = wrapper.querySelector('.audio-element') || wrapper.querySelector('audio');
+        let audio = audioEl;
+        if (!audio) {
+          const src = wrapper.dataset?.src || wrapper.getAttribute('data-src');
+          if (!src) return;
+          audio = new Audio(src);
+          audio.preload = 'none';
+        }
+
+        const playBtn = wrapper.querySelector('.ap-play');
+        const progFill = wrapper.querySelector('.ap-progress-fill');
+        const progBar = wrapper.querySelector('.ap-progress');
+        const timeEl = wrapper.querySelector('.ap-time');
+        const speedBtn = wrapper.querySelector('.ap-speed');
+
+        audio.addEventListener('loadedmetadata', () => {
+          if (timeEl) timeEl.textContent = `0:00 / ${formatTime(audio.duration)}`;
+        });
+
+        audio.addEventListener('timeupdate', () => {
+          const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+          if (progFill) progFill.style.width = pct + '%';
+          if (timeEl) timeEl.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+        });
+
+        audio.addEventListener('play', () => {
+          if (playBtn) { playBtn.textContent = '⏸'; playBtn.classList.add('playing'); }
+        });
+        audio.addEventListener('pause', () => {
+          if (playBtn) { playBtn.textContent = '▶'; playBtn.classList.remove('playing'); }
+        });
+        audio.addEventListener('ended', () => {
+          if (playBtn) { playBtn.textContent = '▶'; playBtn.classList.remove('playing'); }
+          if (progFill) progFill.style.width = '0%';
+        });
+
+        if (playBtn) {
+          playBtn.addEventListener('click', () => {
+            if (audio.paused) audio.play().catch(() => { });
+            else audio.pause();
+          });
+        }
+
+        if (progBar) {
+          progBar.addEventListener('click', (e) => {
+            const rect = progBar.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const pct = Math.max(0, Math.min(1, x / rect.width));
+            if (audio.duration) audio.currentTime = pct * audio.duration;
+          });
+        }
+
+        if (speedBtn) {
+          const speeds = [0.75, 1, 1.25, 1.5, 2];
+          speedBtn.addEventListener('click', () => {
+            const cur = audio.playbackRate || 1;
+            const idx = speeds.indexOf(cur);
+            const next = speeds[(idx + 1) % speeds.length] || 1;
+            audio.playbackRate = next;
+            speedBtn.textContent = next + '×';
+          });
+        }
+
+        // Waveform
+        const waveCanvas = wrapper.querySelector('.ap-wave');
+        const src = (audio && (audio.currentSrc || audio.src)) || wrapper.dataset.src || wrapper.getAttribute('data-src');
+        if (waveCanvas && src) renderWaveform(waveCanvas, src);
+      });
+
+      // Re-render waveforms on resize (debounced)
+      if (!window.__kbWaveResizeBound) {
+        window.__kbWaveResizeBound = true;
+        let rt;
+        window.addEventListener('resize', () => {
+          clearTimeout(rt);
+          rt = setTimeout(() => {
+            const players = window.__kbAudioPlayers || Array.from(document.querySelectorAll('.audio-player'));
+            players.forEach(wrapper => {
+              const canvas = wrapper.querySelector('.ap-wave');
+              const audio = wrapper.querySelector('.audio-element') || wrapper.querySelector('audio');
+              const src = (audio && (audio.currentSrc || audio.src)) || wrapper.dataset.src || wrapper.getAttribute('data-src');
+              if (canvas && src) renderWaveform(canvas, src);
+            });
+          }, 180);
+        }, { passive: true });
+      }
+    } catch (err) { console.warn('Audio init failed', err); }
+  }
+
+  initAudioPlayers();
+
 })();

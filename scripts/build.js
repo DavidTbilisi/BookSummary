@@ -115,10 +115,21 @@ function wrapHtml(id, meta, body, wordCount) {
         </div>
         ${meta && meta.audio ? `
           <div class="hero-audio">
-            <audio controls preload="none">
-              <source src="${meta.audio}" type="audio/mpeg">
-              Your browser does not support the audio element.
-            </audio>
+            <div class="audio-player" data-src="${meta.audio}">
+              <button class="ap-btn ap-play" aria-label="Play">▶</button>
+              <div class="ap-track" role="presentation" aria-hidden="false">
+                  <canvas class="ap-wave" aria-hidden="true"></canvas>
+                  <div class="ap-progress" title="Seek">
+                    <div class="ap-progress-fill" style="width:0%"></div>
+                  </div>
+                </div>
+              <div class="ap-time">0:00 / 0:00</div>
+              <button class="ap-speed" data-speed="1" title="Playback speed">1×</button>
+              <audio class="audio-element" preload="none">
+                <source src="${meta.audio}" type="audio/mpeg">
+                Your browser does not support the audio element.
+              </audio>
+            </div>
           </div>
         ` : ''}
       </div>

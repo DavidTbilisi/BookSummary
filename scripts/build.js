@@ -15,11 +15,11 @@ const dataFile = path.join(root, 'data', 'books.json');
 // Valid genres — add new genres here to make them available in front matter
 const GENRE_PALETTE = {
   productivity: { label: 'Productivity', bg: '#fed7aa', color: '#9a3412' },
-  learning:     { label: 'Learning',     bg: '#bbf7d0', color: '#14532d' },
-  thinking:     { label: 'Thinking',     bg: '#bfdbfe', color: '#1e3a5f' },
-  finance:      { label: 'Finance',      bg: '#99f6e4', color: '#134e4a' },
-  psychology:   { label: 'Psychology',   bg: '#fbcfe8', color: '#831843' },
-  general:      { label: 'General',      bg: '#e5e7eb', color: '#374151' },
+  learning: { label: 'Learning', bg: '#bbf7d0', color: '#14532d' },
+  thinking: { label: 'Thinking', bg: '#bfdbfe', color: '#1e3a5f' },
+  finance: { label: 'Finance', bg: '#99f6e4', color: '#134e4a' },
+  psychology: { label: 'Psychology', bg: '#fbcfe8', color: '#831843' },
+  general: { label: 'General', bg: '#e5e7eb', color: '#374151' },
 };
 
 // Parse YAML front matter from a markdown file.
@@ -31,13 +31,13 @@ function parseFrontMatter(raw) {
   const end = src.indexOf('\n---\n', 4);
   if (end === -1) return { meta: {}, body: raw };
   const block = src.slice(4, end);
-  const body  = src.slice(end + 5);
-  const meta  = {};
+  const body = src.slice(end + 5);
+  const meta = {};
   for (const line of block.split('\n')) {
     const sep = line.indexOf(':');
     if (sep === -1) continue;
     const key = line.slice(0, sep).trim();
-    let   val = line.slice(sep + 1).trim();
+    let val = line.slice(sep + 1).trim();
     // Strip inline comments (# ...) only for non-URL values
     if (!val.startsWith('http')) val = val.replace(/\s+#.*$/, '');
     // Strip surrounding quotes
@@ -62,18 +62,18 @@ function validateMeta(id, meta) {
   }
 }
 
-async function ensureDir(p){ await fs.mkdir(p, { recursive: true }); }
+async function ensureDir(p) { await fs.mkdir(p, { recursive: true }); }
 
-function countWords(markdown){
-  return markdown.replace(/```[\s\S]*?```/g,'').replace(/[#*_`\[\]()>]/g,'').trim().split(/\s+/).filter(Boolean).length;
+function countWords(markdown) {
+  return markdown.replace(/```[\s\S]*?```/g, '').replace(/[#*_`\[\]()>]/g, '').trim().split(/\s+/).filter(Boolean).length;
 }
 
-function wrapHtml(id, meta, body, wordCount){
+function wrapHtml(id, meta, body, wordCount) {
   const readMin = Math.max(1, Math.round(wordCount / 200));
-  const title   = meta.title  || id;
-  const author  = meta.author || '';
-  const cover   = meta.cover  || '';
-  const bookUrl = meta.book   || '#';
+  const title = meta.title || id;
+  const author = meta.author || '';
+  const cover = meta.cover || '';
+  const bookUrl = meta.book || '#';
   return `<!DOCTYPE html>
 <html lang="ka" data-theme="dark">
 <head>
@@ -142,21 +142,23 @@ ${body}
 
 </div>
 
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" defer></script>
 <script src="../../assets/js/reader.js" defer></script>
 </body>
 </html>`;
 }
 
-async function build(){
+async function build() {
   await ensureDir(destDir);
   const entries = await fs.readdir(srcDir);
   const books = [];
   let warnings = 0;
-  for(const file of entries){
-    if(!file.endsWith('.md')) continue;
+  for (const file of entries) {
+    if (!file.endsWith('.md')) continue;
     // Only process numeric IDs (e.g. 001.md, 007.md) — skip TEMPLATE.md and other non-book files
     const id = file.replace(/\.md$/, '');
-    if(!/^\d+$/.test(id)) continue;
+    if (!/^\d+$/.test(id)) continue;
     const raw = await fs.readFile(path.join(srcDir, file), 'utf8');
     const { meta, body } = parseFrontMatter(raw);
     validateMeta(id, meta);
@@ -167,17 +169,17 @@ async function build(){
     await fs.writeFile(outFile, outHtml, 'utf8');
     books.push({
       id,
-      title:   meta.title   || id,
-      author:  meta.author  || '',
-      cover:   meta.cover   || '',
+      title: meta.title || id,
+      author: meta.author || '',
+      cover: meta.cover || '',
       summary: `books/dest/${id}.html`,
-      book:    meta.book    || '#',
-      desc:    meta.desc    || '',
-      genre:   meta.genre   || 'general',
+      book: meta.book || '#',
+      desc: meta.desc || '',
+      genre: meta.genre || 'general',
     });
   }
   // Preserve ordering by id numeric
-  books.sort((a,b)=> a.id.localeCompare(b.id, undefined, { numeric:true }));
+  books.sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true }));
   await fs.writeFile(dataFile, JSON.stringify(books, null, 2), 'utf8');
   console.log(`Built ${books.length} book(s).`);
 }

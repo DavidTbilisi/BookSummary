@@ -5,7 +5,7 @@
 
 (function () {
   const STORE_KEY = 'reader:prefs:v2';
-  const THEMES    = ['dark', 'light', 'sepia', 'night', 'hc'];
+  const THEMES = ['dark', 'light', 'sepia', 'night', 'hc'];
 
   // ── Prefs ───────────────────────────────
   function loadPrefs() {
@@ -27,16 +27,16 @@
   }
 
   // ── Scroll progress ─────────────────────
-  const fillEl  = document.getElementById('scrollFill');
-  const pctEl   = document.getElementById('readPct');
+  const fillEl = document.getElementById('scrollFill');
+  const pctEl = document.getElementById('readPct');
 
   function updateProgress() {
-    const scrollTop  = window.scrollY;
-    const docHeight  = document.documentElement.scrollHeight - window.innerHeight;
-    const ratio      = docHeight > 0 ? Math.min(1, scrollTop / docHeight) : 0;
-    const pct        = Math.round(ratio * 100);
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const ratio = docHeight > 0 ? Math.min(1, scrollTop / docHeight) : 0;
+    const pct = Math.round(ratio * 100);
     if (fillEl) fillEl.style.width = pct + '%';
-    if (pctEl)  pctEl.textContent  = pct + '%';
+    if (pctEl) pctEl.textContent = pct + '%';
   }
 
   window.addEventListener('scroll', updateProgress, { passive: true });
@@ -54,7 +54,7 @@
   }
 
   function cycleTheme() {
-    const idx  = THEMES.indexOf(getTheme());
+    const idx = THEMES.indexOf(getTheme());
     const next = THEMES[(idx + 1) % THEMES.length];
     setTheme(next);
   }
@@ -71,7 +71,7 @@
   // ── Font size ───────────────────────────
   function adjustFont(delta) {
     const current = prefs.fontSize || 1.05;
-    const next    = Math.min(1.65, Math.max(0.8, +(current + delta).toFixed(2)));
+    const next = Math.min(1.65, Math.max(0.8, +(current + delta).toFixed(2)));
     prefs.fontSize = next;
     savePrefs(prefs);
     document.documentElement.style.setProperty('--font-size-base', next + 'rem');
@@ -84,12 +84,12 @@
       const btn = e.target.closest('[data-act]');
       if (!btn) return;
       switch (btn.dataset.act) {
-        case 'back':    window.location.href = '../../index.html'; break;
+        case 'back': window.location.href = '../../index.html'; break;
         case 'smaller': adjustFont(-0.05); break;
-        case 'larger':  adjustFont(+0.05); break;
-        case 'theme':   cycleTheme(); break;
-        case 'top':     window.scrollTo({ top: 0, behavior: 'smooth' }); break;
-        case 'print':   window.print(); break;
+        case 'larger': adjustFont(+0.05); break;
+        case 'theme': cycleTheme(); break;
+        case 'top': window.scrollTo({ top: 0, behavior: 'smooth' }); break;
+        case 'print': window.print(); break;
       }
     });
   }
@@ -100,14 +100,14 @@
     switch (e.key) {
       case '+': case '=': adjustFont(+0.05); break;
       case '-': case '_': adjustFont(-0.05); break;
-      case 't':           cycleTheme();      break;
-      case 'Home':        window.scrollTo({ top: 0, behavior: 'smooth' }); break;
+      case 't': cycleTheme(); break;
+      case 'Home': window.scrollTo({ top: 0, behavior: 'smooth' }); break;
     }
   });
 
   // ── Hide/show ctrl bar on scroll ─────────
   let lastScroll = 0;
-  let hideTimer  = null;
+  let hideTimer = null;
 
   window.addEventListener('scroll', () => {
     const now = window.scrollY;
@@ -130,15 +130,15 @@
   }, { passive: true });
 
   // ── Reading time countdown ───────────────
-  const page     = document.querySelector('.reader-page');
-  const readMin  = parseInt(page?.dataset?.readMin || '0', 10);
-  const wordCount = parseInt(page?.dataset?.words   || '0', 10);
+  const page = document.querySelector('.reader-page');
+  const readMin = parseInt(page?.dataset?.readMin || '0', 10);
+  const wordCount = parseInt(page?.dataset?.words || '0', 10);
 
   if (readMin > 0 && pctEl) {
     window.addEventListener('scroll', () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const ratio     = docHeight > 0 ? Math.min(1, scrollTop / docHeight) : 0;
+      const ratio = docHeight > 0 ? Math.min(1, scrollTop / docHeight) : 0;
       const remaining = Math.max(0, Math.ceil(readMin * (1 - ratio)));
       pctEl.textContent = remaining > 0 ? `~${remaining}m left` : 'Done ✓';
     }, { passive: true });
@@ -154,5 +154,46 @@
 
   // ── Init ────────────────────────────────
   applyPrefs();
+
+  // ── Mermaid diagrams initialization ─────
+  function initMermaid() {
+    try {
+      const codeBlocks = Array.from(document.querySelectorAll('pre code.language-mermaid, code.language-mermaid'));
+      if (codeBlocks.length === 0) return;
+      codeBlocks.forEach(code => {
+        const pre = code.closest('pre') || code.parentElement;
+        const div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = code.textContent.trim();
+        if (pre && pre.parentNode) pre.parentNode.replaceChild(div, pre);
+      });
+
+      if (window.mermaid) {
+        try {
+          if (typeof window.mermaid.initialize === 'function') {
+            window.mermaid.initialize({ startOnLoad: false });
+          }
+          if (typeof window.mermaid.init === 'function') {
+            window.mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+          } else if (typeof window.mermaid.run === 'function') {
+            window.mermaid.run();
+          }
+        } catch (err) {
+          console.warn('Mermaid init error', err);
+        }
+      } else {
+        // Mermaid not loaded yet; init on window load
+        window.addEventListener('load', () => {
+          try {
+            if (window.mermaid) {
+              if (typeof window.mermaid.initialize === 'function') window.mermaid.initialize({ startOnLoad: false });
+              if (typeof window.mermaid.init === 'function') window.mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+            }
+          } catch (err) { console.warn('Mermaid init on load failed', err); }
+        });
+      }
+    } catch (err) { console.warn('Mermaid processing failed', err); }
+  }
+  initMermaid();
 
 })();

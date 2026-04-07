@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css"/>
 <link rel="stylesheet" href="../../assets/css/reader.css"/>
 <script>(function(){try{var p=JSON.parse(localStorage.getItem('reader:prefs:v2')||'{}');if(p.theme)document.documentElement.setAttribute('data-theme',p.theme);if(p.fontSize)document.documentElement.style.setProperty('--font-size-base',p.fontSize+'rem');}catch(e){}})();</script>
 </head>
@@ -37,21 +38,9 @@
         </div>
         
           <div class="hero-audio">
-            <div class="audio-player" data-src="../../audio/010.mp3">
-              <button class="ap-btn ap-play" aria-label="Play">▶</button>
-              <div class="ap-track" role="presentation" aria-hidden="false">
-                  <canvas class="ap-wave" aria-hidden="true"></canvas>
-                  <div class="ap-progress" title="Seek">
-                    <div class="ap-progress-fill" style="width:0%"></div>
-                  </div>
-                </div>
-              <div class="ap-time">0:00 / 0:00</div>
-              <button class="ap-speed" data-speed="1" title="Playback speed">1×</button>
-              <audio class="audio-element" preload="none">
-                <source src="../../audio/010.mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-              </audio>
-            </div>
+            <audio id="bookPlayer" preload="metadata">
+              <source src="../../audio/010.mp3" type="audio/mpeg">
+            </audio>
           </div>
         
       </div>
@@ -120,6 +109,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" defer></script>
+<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js" defer></script>
 <script src="../../assets/js/reader.js" defer></script>
 </body>
 </html>

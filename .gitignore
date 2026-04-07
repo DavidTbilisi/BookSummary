@@ -1,1 +1,3 @@
 node_modules/
+.part_*.mp3
+tmp_tts/

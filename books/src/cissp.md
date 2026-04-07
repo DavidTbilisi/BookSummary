@@ -1,3 +1,7 @@
+---
+audio: /audio/cissp.mp3
+---
+
 "The Day Shit Almost Hit the Fan"
 David was the CISO at a mid-size fintech company. He didn't sleep much because he knew risk doesn’t sleep.
 

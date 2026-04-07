@@ -62,11 +62,41 @@
   {
     "id": "007",
     "title": "The Art of Systems Thinking - Essential Skills for Creativity and Problem Solving",
-    "author": "Author Name",
+    "author": "Joseph O'Connor, Ian McDermott",
     "cover": "https://m.media-amazon.com/images/I/51SrO5oPAqL._SY522_.jpg",
     "summary": "books/dest/007.html",
     "book": "https://www.amazon.com/Art-Systems-Thinking-Essential-Creativity/dp/0722534426",
     "desc": "სისტემა არის ერთიანობა, რომელიც ინარჩუნებს თავის არსებობას და ფუნქციონირებს როგორც მთლიანობა მისი ნაწილების ურთიერთქმედების შედეგად.",
     "genre": "Thinking"
+  },
+  {
+    "id": "008",
+    "title": "მსჯელობის პატარა ლურჯი წიგნი",
+    "author": "ბრენდონ როიალი",
+    "cover": "https://via.placeholder.com/350x500.png?text=მსჯელობის+პატარა+ლურჯი+წიგნი",
+    "summary": "books/dest/008.html",
+    "book": "#",
+    "desc": "50 მძლავრი პრინციპი მკაფიო და ეფექტური აზროვნებისთვის",
+    "genre": "thinking"
+  },
+  {
+    "id": "009",
+    "title": "როგორ მოვაგვაროთ იგი",
+    "author": "გ.პოლია",
+    "cover": "https://via.placeholder.com/350x500.png?text=როგორ+მოვაგვაროთ+იგი",
+    "summary": "books/dest/009.html",
+    "book": "#",
+    "desc": "პრობლემების გადაჭრის მეთოდები და პრაქტიკული რჩევები",
+    "genre": "learning"
+  },
+  {
+    "id": "010",
+    "title": "ღრმა სამუშაო",
+    "author": "კალ ნიუპორტი",
+    "cover": "https://via.placeholder.com/350x500.png?text=ღრმა+სამუშაო",
+    "summary": "books/dest/010.html",
+    "book": "#",
+    "desc": "ღრმა მუშაობის მნიშვნელობა და პრაქტიკული წესები კონცენტრირებული მუშაობისთვის",
+    "genre": "productivity"
   }
 ]
